@@ -1,1 +1,1 @@
-template for npm projects
+odin to-do list toy project
