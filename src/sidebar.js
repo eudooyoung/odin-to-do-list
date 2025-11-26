@@ -14,26 +14,18 @@ const projectAddButton = document.createElement("button");
 projectAddButton.classList.add("sidebar-footer", "button", "add-project");
 projectAddButton.textContent = "Add Project";
 
-export function addProjectFromUI() {
+export function addProject() {
   const project = createProject();
-  renderProject(project);
-}
-
-function renderProject(project) {
-  const projectItem = setProjectElement(project);
+  const projectItem = renderProjectElement(project);
   sidebarBody.append(projectItem);
+  // renderProject(project);
 }
 
-function setProjectElement(project) {
-  const projectItem = document.createElement("div");
+function renderProjectElement(project) {
+  const projectItem = document.createElement("h2");
   projectItem.classList.add("project-item");
   projectItem.dataset.id = project.id;
-
-  const projectTitle = document.createElement("h2");
-  projectTitle.classList.add("project-title");
-  projectTitle.textContent = project.title;
-
-  projectItem.append(projectTitle);
+  projectItem.textContent = project.title;
 
   return projectItem;
 }

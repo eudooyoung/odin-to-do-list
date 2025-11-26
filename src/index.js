@@ -1,8 +1,5 @@
 import "./styles.css";
-import sidebar, {
-  addProjectFromUI,
-  updateSelectedProject,
-} from "./sidebar.js";
+import sidebar, { addProject, updateSelectedProject } from "./sidebar.js";
 import content, {
   toDoAddButton,
   addToDoFromUI,
@@ -39,7 +36,7 @@ sidebar.addEventListener("click", (e) => {
 
   const projectAddButton = e.target.closest(".button.add-project");
   if (projectAddButton) {
-    addProjectFromUI();
+    addProject();
     return;
   }
 });

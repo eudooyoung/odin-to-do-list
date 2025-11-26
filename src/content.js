@@ -3,8 +3,14 @@ import { getProjectById } from "./project";
 const content = document.createElement("div");
 content.id = "content";
 
+const contentHeader = document.createElement("div");
+contentHeader.classList.add("content-header");
+
+const contentBody = document.createElement("div");
+contentBody.classList.add("content-body");
+
 export const toDoAddButton = document.createElement("button");
-toDoAddButton.classList.add("button", "add-toDo");
+toDoAddButton.classList.add("content-footer", "button", "add-toDo");
 toDoAddButton.textContent = "Add Todo";
 
 let project = null;
@@ -14,19 +20,16 @@ export function setContentWithProjectId(id) {
   clearContent();
   project = getProjectById(id);
   toDoList = project.toDoList;
-  displayContent();
+  renderContent();
 }
 
-function displayContent() {
-  displayContentHeader();
-  displayToDoList();
+function renderContent() {
+  renderContentHeader();
+  renderContentBody();
   content.appendChild(toDoAddButton);
 }
 
-function displayContentHeader() {
-  const contentHeader = document.createElement("div");
-  contentHeader.classList.add("header");
-
+function renderContentHeader() {
   const projectTitle = document.createElement("h2");
   projectTitle.classList.add("project-title");
   projectTitle.textContent = project.title;
@@ -40,10 +43,10 @@ function displayContentHeader() {
   content.append(contentHeader);
 }
 
-function displayToDoList() {
+function renderContentBody() {
   toDoList.forEach((toDo) => {
     const toDoItem = setToDoElement(toDo);
-    content.append(toDoItem);
+    contentBody.append(toDoItem);
   });
 }
 
