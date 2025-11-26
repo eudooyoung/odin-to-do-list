@@ -1,9 +1,8 @@
 import "./styles.css";
-import sidebar, { addProject, updateSelectedProject } from "./sidebar.js";
+import sidebar, { addProjectFromUI, updateSelectedProject } from "./sidebar.js";
 import content, {
-  toDoAddButton,
   addToDoFromUI,
-  setContentWithProjectId,
+  renderContentByProjectId,
   toggleToDoDetail,
   clearContent,
 } from "./content.js";
@@ -27,8 +26,9 @@ sidebar.addEventListener("click", (e) => {
       clearContent();
     } else {
       updateSelectedProject(projectItem);
+
       const id = projectItem.dataset.id;
-      setContentWithProjectId(id);
+      renderContentByProjectId(id);
     }
 
     return;
@@ -36,20 +36,23 @@ sidebar.addEventListener("click", (e) => {
 
   const projectAddButton = e.target.closest(".button.add-project");
   if (projectAddButton) {
-    addProject();
+    addProjectFromUI();
     return;
   }
 });
 
 content.addEventListener("click", (e) => {
   const toDoItem = e.target.closest(".todo-item");
-  if (!toDoItem) return;
+  if (toDoItem) {
+    toggleToDoDetail(toDoItem);
+    return;
+  }
 
-  toggleToDoDetail(toDoItem);
-});
-
-toDoAddButton.addEventListener("click", () => {
-  addToDoFromUI();
+  const toDoAddButton = e.target.closest(".button.add-todo");
+  if (toDoAddButton) {
+    addToDoFromUI();
+    return;
+  }
 });
 
 body.appendChild(sidebar);

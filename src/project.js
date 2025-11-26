@@ -1,4 +1,4 @@
-import ToDoItem from "./toDoItem.js";
+import ToDo from "./toDoItem.js";
 
 const projectList = [];
 
@@ -9,8 +9,8 @@ class Project {
     this.toDoList = [];
   }
 
-  addToDo() {
-    this.toDoList.push(new ToDoItem("test", "test", "test", "test"));
+  addToDo(toDo) {
+    this.toDoList.push(toDo);
   }
 }
 

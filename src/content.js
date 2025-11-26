@@ -1,4 +1,5 @@
 import { getProjectById } from "./project";
+import { createToDo } from "./toDoItem";
 
 const content = document.createElement("div");
 content.id = "content";
@@ -9,24 +10,24 @@ contentHeader.classList.add("content-header");
 const contentBody = document.createElement("div");
 contentBody.classList.add("content-body");
 
-export const toDoAddButton = document.createElement("button");
-toDoAddButton.classList.add("content-footer", "button", "add-toDo");
+const toDoAddButton = document.createElement("button");
+toDoAddButton.classList.add("content-footer", "button", "add-todo");
 toDoAddButton.textContent = "Add Todo";
 
 let project = null;
 let toDoList = null;
 
-export function setContentWithProjectId(id) {
-  clearContent();
+export function renderContentByProjectId(id) {
   project = getProjectById(id);
   toDoList = project.toDoList;
+  clearContent();
   renderContent();
 }
 
 function renderContent() {
   renderContentHeader();
   renderContentBody();
-  content.appendChild(toDoAddButton);
+  content.append(contentHeader, contentBody, toDoAddButton);
 }
 
 function renderContentHeader() {
@@ -38,19 +39,17 @@ function renderContentHeader() {
   editProjectButton.classList.add("button", "edit-project");
   editProjectButton.textContent = "Edit";
 
-  contentHeader.append(projectTitle, editProjectButton);
-
-  content.append(contentHeader);
+  contentHeader.append(projectTitle);
 }
 
 function renderContentBody() {
   toDoList.forEach((toDo) => {
-    const toDoItem = setToDoElement(toDo);
+    const toDoItem = renderToDoElement(toDo);
     contentBody.append(toDoItem);
   });
 }
 
-function setToDoElement(toDo) {
+function renderToDoElement(toDo) {
   const toDoItem = document.createElement("div");
   toDoItem.classList.add("todo-item");
   toDoItem.dataset.id = toDo.id;
@@ -110,13 +109,20 @@ function getToDoDetail(toDoItem) {
 }
 
 export function addToDoFromUI() {
-  project.addToDo();
-  clearContent();
-  displayContent();
+  const toDo = createToDo("test", "test", "test", "test");
+  project.addToDo(toDo);
+
+  const toDoItem = renderToDoElement(toDo);
+
+  contentBody.append(toDoItem);
+  // clearContent();
+  // renderContent();
 }
 
 export function clearContent() {
   content.innerHTML = "";
+  contentHeader.innerHTML = "";
+  contentBody.innerHTML = "";
 }
 
 export default content;

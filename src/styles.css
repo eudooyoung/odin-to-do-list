@@ -1,5 +1,5 @@
 :root {
-  --deep-blue: #18186c;
+  --deep-blue: #0a124c;
 }
 
 * {
@@ -14,11 +14,16 @@ body {
 
   display: grid;
   grid-template-columns: 400px 1fr;
-  grid-gap: 1px;
+  grid-gap: 2px;
 }
 
 .button {
   font: inherit;
+  border: none;
+}
+
+.button:hover {
+  cursor: pointer;
 }
 
 #sidebar {
@@ -28,7 +33,7 @@ body {
   align-content: start;
 }
 
-#sidebar .banner {
+.banner {
   justify-self: start;
   margin: 3rem;
 
@@ -36,7 +41,7 @@ body {
   letter-spacing: 0.3rem;
 }
 
-#sidebar .banner:hover {
+.banner:hover {
   cursor: pointer;
 }
 
@@ -47,10 +52,6 @@ body {
 .project-item.selected {
   background: var(--deep-blue);
   color: white;
-}
-
-.project-item:hover {
-  cursor: pointer;
 }
 
 .button.add-project {
@@ -71,19 +72,31 @@ body {
 
 #content {
   background-color: white;
-  padding: 7rem 15rem;
+  padding: 0 15rem;
+
+  display: grid;
 }
 
-#content .header {
+.content-header {
+  height: 200px;
+  /* background-color: green; */
+
   display: grid;
   grid-auto-flow: column;
 }
 
-#content .project-title {
+.content-header .project-title {
+  place-self: center;
   font-size: 2rem;
 }
 
-.button.add-toDo {
+.button.edit-project {
+  /* place-self: center; */
+}
+
+.button.add-todo {
+  place-self: center;
+
   margin: 0.5rem;
   padding: 0.2rem 0.4rem;
   border: none;

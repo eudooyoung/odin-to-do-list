@@ -14,11 +14,10 @@ const projectAddButton = document.createElement("button");
 projectAddButton.classList.add("sidebar-footer", "button", "add-project");
 projectAddButton.textContent = "Add Project";
 
-export function addProject() {
+export function addProjectFromUI() {
   const project = createProject();
   const projectItem = renderProjectElement(project);
   sidebarBody.append(projectItem);
-  // renderProject(project);
 }
 
 function renderProjectElement(project) {
