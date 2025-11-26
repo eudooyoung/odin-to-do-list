@@ -75,12 +75,10 @@ body {
   padding: 0 15rem;
 
   display: grid;
+  grid-template-rows: 200px 10px 100px;
 }
 
 .content-header {
-  height: 200px;
-  /* background-color: green; */
-
   display: grid;
   grid-auto-flow: column;
 }
@@ -92,6 +90,10 @@ body {
 
 .button.edit-project {
   /* place-self: center; */
+}
+
+.content-body {
+  max-width: 300px;
 }
 
 .button.add-todo {
