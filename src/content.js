@@ -11,7 +11,7 @@ const contentBody = document.createElement("div");
 contentBody.classList.add("content-body");
 
 const toDoAddButton = document.createElement("button");
-toDoAddButton.classList.add("content-footer", "button", "add-todo");
+toDoAddButton.classList.add("content-footer", "add-todo");
 toDoAddButton.textContent = "Add Todo";
 
 let project = null;
@@ -36,8 +36,8 @@ function renderContentHeader() {
   projectTitle.textContent = project.title;
 
   const editProjectButton = document.createElement("button");
-  editProjectButton.classList.add("button", "edit-project");
-  editProjectButton.textContent = "…";
+  editProjectButton.classList.add("edit-project");
+  editProjectButton.textContent = "⋮";
 
   contentHeader.append(projectTitle);
 }
