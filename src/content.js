@@ -37,9 +37,9 @@ function renderContentHeader() {
 
   const editProjectButton = document.createElement("button");
   editProjectButton.classList.add("button", "edit-project");
-  editProjectButton.textContent = "⋮";
+  editProjectButton.textContent = "…";
 
-  contentHeader.append(projectTitle, editProjectButton);
+  contentHeader.append(projectTitle);
 }
 
 function renderContentBody() {

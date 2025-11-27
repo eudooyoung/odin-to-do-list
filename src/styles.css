@@ -72,28 +72,36 @@ body {
 
 #content {
   background-color: white;
-  padding: 0 15rem;
+  /* padding: 0 15rem; */
 
   display: grid;
-  grid-template-rows: 200px 10px 100px;
+  grid-template-rows: 14rem auto 100px;
 }
 
 .content-header {
+  /* background-color: var(--deep-blue); */
+  /* color: white; */
+
   display: grid;
   grid-auto-flow: column;
 }
 
 .content-header .project-title {
-  place-self: center;
+  /* place-self: end; */
+  justify-self: center;
+  align-self: end;
+  padding-bottom: 5rem;
   font-size: 2rem;
 }
 
 .button.edit-project {
-  /* place-self: center; */
+  background-color: transparent;
 }
 
 .content-body {
-  max-width: 300px;
+  padding: 0 15rem;
+  max-height: 300px;
+  font-size: 1.5rem;
 }
 
 .button.add-todo {
