@@ -1,21 +1,15 @@
 import "./styles.css";
-import sidebar, {
-  addProjectFromUI,
-  updateSelectedProject,
-} from "./sidebar.js";
+import sidebar, { addProjectFromUI, updateSelectedProject } from "./sidebar.js";
 import content, {
-  addToDoFromUI,
   renderContentByProjectId,
-  toggleToDoDetail,
   clearContent,
+  showEditProjectForm,
+  updateProjectFromUI,
+  addToDoFromUI,
+  toggleToDoDetail,
 } from "./content.js";
 
 const body = document.body;
-
-function handleBannerClick() {
-  updateSelectedProject(null);
-  clearContent();
-}
 
 function handleProjectSelection(projectItem) {
   const isSelected = projectItem.classList.contains("selected");
@@ -33,7 +27,8 @@ function handleProjectSelection(projectItem) {
 
 sidebar.addEventListener("click", (e) => {
   if (e.target.matches(".banner")) {
-    handleBannerClick();
+    updateSelectedProject(null);
+    clearContent();
     return;
   }
 
@@ -50,16 +45,28 @@ sidebar.addEventListener("click", (e) => {
 });
 
 content.addEventListener("click", (e) => {
+  if (e.target.matches(".project-title")) {
+    showEditProjectForm();
+  }
+
   const toDoItem = e.target.closest(".todo-item");
   if (toDoItem) {
     toggleToDoDetail(toDoItem);
     return;
   }
 
-  const btnAddToDo = e.target.closest(".button.add-todo");
-  if (btnAddToDo) {
+  if (e.target.matches("button.add-todo")) {
     addToDoFromUI();
     return;
+  }
+});
+
+content.addEventListener("submit", (e) => {
+  if (e.target.matches("form.edit-project")) {
+    e.preventDefault();
+
+    const form = e.target;
+    updateProjectFromUI(form);
   }
 });
 

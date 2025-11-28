@@ -73,30 +73,37 @@ button.add-project {
 
 #content {
   background-color: white;
-  /* padding: 0 15rem; */
 
   display: grid;
   grid-template-rows: 14rem auto 100px;
 }
 
 .content-header {
-  /* background-color: var(--deep-blue); */
-  /* color: white; */
-
   display: grid;
   grid-auto-flow: column;
 }
 
-.content-header .project-title {
-  /* place-self: end; */
+.content-header > * {
   justify-self: center;
   align-self: end;
   padding-bottom: 5rem;
   font-size: 2rem;
 }
 
-button.edit-project {
-  background-color: transparent;
+.content-header .project-title.hide {
+  display: none;
+}
+
+form {
+  /* display: contents; */
+}
+
+form.edit-project {
+  display: none;
+}
+
+form.edit-project.show {
+  display: block;
 }
 
 .content-body {
