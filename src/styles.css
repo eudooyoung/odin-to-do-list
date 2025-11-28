@@ -59,26 +59,6 @@ button:hover {
   color: white;
 }
 
-button.open-menu {
-  display: inline-flex;
-  background-color: transparent;
-}
-
-.edit-menu {
-  position: fixed;
-  
-  display: none;
-}
-
-.edit-menu.open {
-  /* background-color: black; */
-  display: flex;
-}
-
-.edit-menu button {
-  background-color: transparent;
-}
-
 button.add-project {
   margin: 0.5rem;
   padding: 0.2rem 0.6rem;

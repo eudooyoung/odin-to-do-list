@@ -2,7 +2,6 @@ import "./styles.css";
 import sidebar, {
   addProjectFromUI,
   updateSelectedProject,
-  toggleProjectMenu,
 } from "./sidebar.js";
 import content, {
   addToDoFromUI,
@@ -40,12 +39,6 @@ sidebar.addEventListener("click", (e) => {
 
   const projectItem = e.target.closest(".project-item");
   if (projectItem) {
-    const btnOpenMenu = e.target.closest("button.open-menu");
-    if (btnOpenMenu) {
-      toggleProjectMenu(projectItem, btnOpenMenu);
-      return;
-    }
-
     handleProjectSelection(projectItem);
     return;
   }
@@ -54,7 +47,6 @@ sidebar.addEventListener("click", (e) => {
     addProjectFromUI();
     return;
   }
-
 });
 
 content.addEventListener("click", (e) => {
