@@ -20,8 +20,17 @@ export function createProject(title) {
   return project;
 }
 
+export function deleteProjectById(id) {
+  const idxToDelete = projectList.findIndex((project) => project.id === id);
+  projectList.splice(idxToDelete, 1);
+}
+
 export function getProjectById(id) {
   return projectList.find((project) => project.id === id);
+}
+
+export function getProjectList() {
+  return projectList;
 }
 
 export default Project;

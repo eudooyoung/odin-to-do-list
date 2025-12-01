@@ -1,4 +1,4 @@
-import { getProjectById } from "./project";
+import { getProjectById, deleteProjectById } from "./project";
 import { createToDo } from "./toDoItem";
 
 const content = document.createElement("div");
@@ -28,7 +28,9 @@ export function renderContentByProjectId(id) {
 }
 
 export function clearContent() {
-  content.innerHTML = "";
+  contentHeader.innerHTML = "";
+  editProjectForm.innerHTML = "";
+  contentBody.innerHTML = "";
 }
 
 function renderContent(project) {
@@ -40,7 +42,7 @@ function renderContent(project) {
 function renderContentHeader(project) {
   projectTitle.textContent = project.title;
 
-  const editProjectForm = renderEditProjectForm(project);
+  renderEditProjectForm(project);
 
   contentHeader.append(projectTitle, editProjectForm);
 }
@@ -62,8 +64,6 @@ function renderEditProjectForm(project) {
     projectTitleInput,
     editFormBtnContainer
   );
-
-  return editProjectForm;
 }
 
 function renderEditFormBtnContainer() {
@@ -71,16 +71,16 @@ function renderEditFormBtnContainer() {
   btnContainer.classList.add("btn-container");
 
   const btnConfirmEdit = document.createElement("button");
-  btnConfirmEdit.classList.add("confirm-edit-project");
+  btnConfirmEdit.classList.add("confirm");
   btnConfirmEdit.textContent = "Confirm";
 
   const btnCancelEdit = document.createElement("button");
-  btnCancelEdit.classList.add("cancel-edit-project");
+  btnCancelEdit.classList.add("cancel");
   btnCancelEdit.type = "button";
   btnCancelEdit.textContent = "Cancel";
 
   const btnDeleteProject = document.createElement("button");
-  btnDeleteProject.classList.add("delete-project");
+  btnDeleteProject.classList.add("delete");
   btnDeleteProject.type = "button";
   btnDeleteProject.textContent = "Delete";
 
@@ -94,12 +94,22 @@ export function showEditProjectForm() {
   editProjectForm.classList.add("show");
 }
 
+export function hideEditProjectForm() {
+  projectTitle.classList.remove("hide");
+  editProjectForm.classList.remove("show");
+}
+
 export function updateProjectFromUI(form) {
   const newTitle = form.querySelector("input[name='new-project-title']");
   const project = getProjectById(content.dataset.projectId);
   project.title = newTitle.value;
+  hideEditProjectForm();
   clearContent();
   renderContent(project);
+}
+
+export function deleteProjectFromUI() {
+  deleteProjectById(content.dataset.projectId);
 }
 
 function renderContentBody(project) {

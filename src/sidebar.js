@@ -1,4 +1,4 @@
-import { createProject } from "./project.js";
+import { createProject, getProjectList } from "./project.js";
 
 const sidebar = document.createElement("div");
 sidebar.id = "sidebar";
@@ -14,10 +14,22 @@ const btnAddProject = document.createElement("button");
 btnAddProject.classList.add("sidebar-footer", "add-project");
 btnAddProject.textContent = "Add Project";
 
-export function addProjectFromUI() {
-  const project = createProject();
-  const projectItem = renderProjectElement(project);
-  sidebarBody.append(projectItem);
+export function renderSidebar() {
+  clearSidebar();
+  renderSidebarBody();
+  sidebar.append(banner, sidebarBody, btnAddProject);
+}
+
+function clearSidebar() {
+  sidebarBody.innerHTML = "";
+}
+
+function renderSidebarBody() {
+  const projectList = getProjectList();
+  projectList.forEach((project) => {
+    const projectItem = renderProjectElement(project);
+    sidebarBody.append(projectItem);
+  });
 }
 
 function renderProjectElement(project) {
@@ -29,12 +41,20 @@ function renderProjectElement(project) {
   return projectItem;
 }
 
-export function updateSelectedProject(projectItem) {
+export function addProjectFromUI() {
+  const project = createProject();
+  const projectItem = renderProjectElement(project);
+  sidebarBody.append(projectItem);
+  
+  return projectItem;
+}
+
+export function updateSelectedProjectItem(projectItem) {
   document.querySelectorAll(".project-item").forEach((item) => {
     item.classList.toggle("selected", item === projectItem);
   });
 }
 
-sidebar.append(banner, sidebarBody, btnAddProject);
+renderSidebar();
 
 export default sidebar;
