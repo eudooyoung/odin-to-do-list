@@ -1,6 +1,7 @@
 import "./styles.css";
 import sidebar, {
   renderSidebar,
+  getProjectItemById,
   addProjectFromUI,
   updateSelectedProjectItem,
 } from "./sidebar.js";
@@ -16,29 +17,32 @@ import content, {
 } from "./content.js";
 
 const body = document.body;
-const clickEvent = new Event("click");
 
 function renderPage() {
+  renderSidebar();
   body.append(sidebar, content);
 }
-
 
 function handleProjectSelection(projectItem) {
   const isSelected = projectItem.classList.contains("selected");
 
-  if (!isSelected) {
-    updateSelectedProjectItem(projectItem);
-
-    hideEditProjectForm();
-
-    const id = projectItem.dataset.id;
-    renderContentByProjectId(id);
-  }
-
   if (isSelected) {
-    updateSelectedProjectItem(null);
-    clearContent();
+    deselectProject();
+  } else {
+    selectProject(projectItem);
   }
+}
+
+function selectProject(projectItem) {
+  updateSelectedProjectItem(projectItem);
+  
+  const id = projectItem.dataset.id;
+  renderContentByProjectId(id);
+}
+
+function deselectProject() {
+  updateSelectedProjectItem(null);
+  clearContent();
 }
 
 sidebar.addEventListener("click", (e) => {
@@ -51,12 +55,14 @@ sidebar.addEventListener("click", (e) => {
   const projectItem = e.target.closest(".project-item");
   if (projectItem) {
     handleProjectSelection(projectItem);
+    hideEditProjectForm();
     return;
   }
 
   if (e.target.matches("button.add-project")) {
     const projectItem = addProjectFromUI();
     handleProjectSelection(projectItem);
+    showEditProjectForm();
     return;
   }
 });

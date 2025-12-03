@@ -3,9 +3,10 @@ import ToDo from "./toDoItem.js";
 const projectList = [];
 
 class Project {
-  constructor(title = "New Project") {
+  title = "";
+  
+  constructor() {
     this.id = "P-" + crypto.randomUUID();
-    this.title = title;
     this.toDoList = [];
   }
 

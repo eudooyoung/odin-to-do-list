@@ -101,10 +101,12 @@ export function hideEditProjectForm() {
 
 export function updateProjectFromUI(form) {
   const newTitle = form.querySelector("input[name='new-project-title']");
+  if (newTitle.value === "") {
+    deleteProjectById(content.dataset.projectId);
+    return;
+  }
   const project = getProjectById(content.dataset.projectId);
   project.title = newTitle.value;
-  hideEditProjectForm();
-  clearContent();
   renderContent(project);
 }
 
