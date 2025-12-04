@@ -6,8 +6,10 @@ import sidebar, {
   updateSelectedProjectItem,
 } from "./sidebar.js";
 import content, {
+  openProjectCreateForm,
   renderContentByProjectId,
   clearContent,
+  getEditProjectForm,
   showEditProjectForm,
   updateProjectFromUI,
   deleteProjectFromUI,
@@ -35,7 +37,7 @@ function handleProjectSelection(projectItem) {
 
 function selectProject(projectItem) {
   updateSelectedProjectItem(projectItem);
-  
+
   const id = projectItem.dataset.id;
   renderContentByProjectId(id);
 }
@@ -43,6 +45,14 @@ function selectProject(projectItem) {
 function deselectProject() {
   updateSelectedProjectItem(null);
   clearContent();
+}
+
+function autoSave() {
+  const projectEditForm = getEditProjectForm();
+  if (projectEditForm.hasChildNodes()) {
+    updateProjectFromUI(projectEditForm);
+    renderSidebar();
+  }
 }
 
 sidebar.addEventListener("click", (e) => {
@@ -55,14 +65,15 @@ sidebar.addEventListener("click", (e) => {
   const projectItem = e.target.closest(".project-item");
   if (projectItem) {
     handleProjectSelection(projectItem);
-    hideEditProjectForm();
     return;
   }
 
   if (e.target.matches("button.add-project")) {
+    autoSave();
     const projectItem = addProjectFromUI();
+    openProjectCreateForm();
     handleProjectSelection(projectItem);
-    showEditProjectForm();
+    // showEditProjectForm();
     return;
   }
 });
@@ -98,8 +109,9 @@ content.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const form = e.target;
-    updateProjectFromUI(form);
+    const updatedProject = updateProjectFromUI(form);
     renderSidebar();
+    updateSelectedProjectItem(getProjectItemById(updatedProject.id));
   }
 });
 

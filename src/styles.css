@@ -67,17 +67,6 @@ button:hover {
   display: none;
 }
 
-form.create-project input{
-  height: 100%;
-  width: 100%;
-  font: inherit;
-  font-size: inherit;
-}
-
-form.create-project.hide {
-  display: none;
-}
-
 button.add-project {
   margin: 0.5rem;
   padding: 0.2rem 0.6rem;
@@ -97,6 +86,18 @@ button.add-project {
   grid-template-rows: 14rem auto 100px;
 }
 
+#content > *.hide {
+  display: none;
+}
+
+form.create-project {
+  display: none;
+}
+
+form.create-project.show {
+  display: block;
+}
+
 .content-header {
   display: grid;
   grid-auto-flow: column;
@@ -111,10 +112,6 @@ button.add-project {
 
 .content-header .project-title.hide {
   display: none;
-}
-
-form {
-  /* display: contents; */
 }
 
 form.edit-project {

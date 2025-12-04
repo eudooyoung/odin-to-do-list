@@ -66,7 +66,7 @@ function renderProjectCreateForm() {
   return projectCreateForm;
 }
 
- function getProjectItemById(projectId) {
+export function getProjectItemById(projectId) {
   return sidebarBody.querySelector(`.project-item[data-id="${projectId}"]`);
 }
 
@@ -74,7 +74,6 @@ export function addProjectFromUI() {
   const project = createProject();
   renderSidebar();
   const projectItem = getProjectItemById(project.id);
-  // getFocusOnSelectedItem(projectItem);
   return projectItem;
 }
 

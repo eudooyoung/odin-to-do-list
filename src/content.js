@@ -1,8 +1,16 @@
-import { getProjectById, deleteProjectById } from "./project";
+import {
+  getProjectById,
+  updateProjectTitle,
+  deleteProjectById,
+  getUniqueTitle,
+} from "./project";
 import { createToDo } from "./toDoItem";
 
 const content = document.createElement("div");
 content.id = "content";
+
+const projectCreateForm = document.createElement("form");
+projectCreateForm.classList.add("create-project", "hide");
 
 const contentHeader = document.createElement("div");
 contentHeader.classList.add("content-header");
@@ -10,8 +18,8 @@ contentHeader.classList.add("content-header");
 const projectTitle = document.createElement("h2");
 projectTitle.classList.add("project-title");
 
-const editProjectForm = document.createElement("form");
-editProjectForm.classList.add("edit-project");
+const projectEditForm = document.createElement("form");
+projectEditForm.classList.add("edit-project");
 
 const contentBody = document.createElement("div");
 contentBody.classList.add("content-body");
@@ -27,16 +35,11 @@ export function renderContentByProjectId(id) {
   renderContent(project);
 }
 
-export function clearContent() {
-  contentHeader.innerHTML = "";
-  editProjectForm.innerHTML = "";
-  contentBody.innerHTML = "";
-}
-
 function renderContent(project) {
   renderContentHeader(project);
   renderContentBody(project);
-  content.append(contentHeader, contentBody, toDoAddButton);
+  renderProjectCreateForm();
+  content.append(contentHeader, contentBody, toDoAddButton, projectCreateForm);
 }
 
 function renderContentHeader(project) {
@@ -44,26 +47,32 @@ function renderContentHeader(project) {
 
   renderEditProjectForm(project);
 
-  contentHeader.append(projectTitle, editProjectForm);
+  contentHeader.append(projectTitle, projectEditForm);
 }
 
 function renderEditProjectForm(project) {
-  const projectTitleLabel = document.createElement("label");
-  projectTitleLabel.htmlFor = "new-project-title";
-
   const projectTitleInput = document.createElement("input");
   projectTitleInput.type = "text";
-  projectTitleInput.id = "new-project-title";
   projectTitleInput.name = "new-project-title";
   projectTitleInput.value = project.title;
 
   const editFormBtnContainer = renderEditFormBtnContainer();
 
-  editProjectForm.append(
-    projectTitleLabel,
-    projectTitleInput,
-    editFormBtnContainer
-  );
+  projectEditForm.append(projectTitleInput, editFormBtnContainer);
+}
+
+export function getEditProjectForm() {
+  return projectEditForm;
+}
+
+export function showEditProjectForm() {
+  projectTitle.classList.add("hide");
+  projectEditForm.classList.add("show");
+}
+
+export function hideEditProjectForm() {
+  projectTitle.classList.remove("hide");
+  projectEditForm.classList.remove("show");
 }
 
 function renderEditFormBtnContainer() {
@@ -89,25 +98,16 @@ function renderEditFormBtnContainer() {
   return btnContainer;
 }
 
-export function showEditProjectForm() {
-  projectTitle.classList.add("hide");
-  editProjectForm.classList.add("show");
-}
-
-export function hideEditProjectForm() {
-  projectTitle.classList.remove("hide");
-  editProjectForm.classList.remove("show");
-}
-
 export function updateProjectFromUI(form) {
-  const newTitle = form.querySelector("input[name='new-project-title']");
-  if (newTitle.value === "") {
-    deleteProjectById(content.dataset.projectId);
-    return;
-  }
+  const newTitle = form
+    .querySelector("input[name='new-project-title']")
+    .value.trim();
   const project = getProjectById(content.dataset.projectId);
-  project.title = newTitle.value;
+  const uniqueTitle = getUniqueTitle(newTitle, project);
+  updateProjectTitle(project, uniqueTitle);
+  hideEditProjectForm();
   renderContent(project);
+  return project;
 }
 
 export function deleteProjectFromUI() {
@@ -193,6 +193,36 @@ export function addToDoFromUI() {
   const toDoItem = renderToDoElement(toDo);
 
   contentBody.append(toDoItem);
+}
+
+function toggleProjectContent() {
+  contentHeader.classList.toggle("hide");
+  contentBody.classList.toggle("hide");
+  toDoAddButton.classList.toggle("hide");
+}
+
+function renderProjectCreateForm() {
+  const projectTitleInput = document.createElement("input");
+  projectTitleInput.classList.add("new-project-title");
+  projectTitleInput.name = "new-project-title";
+  projectTitleInput.value = "New Project";
+
+  projectCreateForm.append(projectTitleInput);
+}
+
+export function openProjectCreateForm() {
+  projectCreateForm.classList.toggle("hide");
+  const projectTitleInput = projectCreateForm.querySelector(
+    "input.new-project-title"
+  );
+  projectTitleInput.focus();
+}
+
+export function clearContent() {
+  contentHeader.innerHTML = "";
+  projectEditForm.innerHTML = "";
+  contentBody.innerHTML = "";
+  hideEditProjectForm();
 }
 
 export default content;
