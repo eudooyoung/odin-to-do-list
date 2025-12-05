@@ -9,9 +9,6 @@ import { createToDo } from "./toDoItem";
 const content = document.createElement("div");
 content.id = "content";
 
-const projectCreateForm = document.createElement("form");
-projectCreateForm.classList.add("create-project", "hide");
-
 const contentHeader = document.createElement("div");
 contentHeader.classList.add("content-header");
 
@@ -38,8 +35,7 @@ export function renderContentByProjectId(id) {
 function renderContent(project) {
   renderContentHeader(project);
   renderContentBody(project);
-  renderProjectCreateForm();
-  content.append(contentHeader, contentBody, toDoAddButton, projectCreateForm);
+  content.append(contentHeader, contentBody, toDoAddButton);
 }
 
 function renderContentHeader(project) {
@@ -208,14 +204,6 @@ function renderProjectCreateForm() {
   projectTitleInput.value = "New Project";
 
   projectCreateForm.append(projectTitleInput);
-}
-
-export function openProjectCreateForm() {
-  projectCreateForm.classList.toggle("hide");
-  const projectTitleInput = projectCreateForm.querySelector(
-    "input.new-project-title"
-  );
-  projectTitleInput.focus();
 }
 
 export function clearContent() {

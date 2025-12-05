@@ -8,15 +8,6 @@
   box-sizing: border-box;
 }
 
-body {
-  height: 100dvh;
-  background-color: black;
-
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  grid-gap: 2px;
-}
-
 button {
   border: none;
   font: inherit;
@@ -27,6 +18,15 @@ button:hover {
   cursor: pointer;
 }
 
+body {
+  height: 100dvh;
+  background-color: black;
+
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  grid-gap: 2px;
+}
+
 #sidebar {
   background-color: white;
 
@@ -34,8 +34,11 @@ button:hover {
   align-content: start;
 }
 
+.sidebar-header {
+  display: flex;
+}
+
 .banner {
-  justify-self: start;
   margin: 3rem;
 
   font-size: 3rem;
@@ -51,11 +54,12 @@ button:hover {
   grid-auto-rows: 3rem;
 }
 
-.project-item {
-  padding: 0.5rem 5rem 0.5rem 5rem;
+.sidebar-body > * {
+  padding: 0.5rem 1rem 0.5rem 5rem;
+  outline: 1px solid black;
+}
 
-  display: grid;
-  justify-content: space-between;
+.project-item {
 }
 
 .project-item.selected {
@@ -63,8 +67,16 @@ button:hover {
   color: white;
 }
 
-.project-item .project-title.hide {
-  display: none;
+form.create-project {
+  height: 100%;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidebar-footer {
+  display: flex;
+  justify-content: center;
 }
 
 button.add-project {
@@ -75,8 +87,6 @@ button.add-project {
   background: black;
   color: #fffcf2;
   letter-spacing: 2px;
-
-  justify-self: center;
 }
 
 #content {
@@ -84,18 +94,6 @@ button.add-project {
 
   display: grid;
   grid-template-rows: 14rem auto 100px;
-}
-
-#content > *.hide {
-  display: none;
-}
-
-form.create-project {
-  display: none;
-}
-
-form.create-project.show {
-  display: block;
 }
 
 .content-header {

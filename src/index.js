@@ -1,12 +1,15 @@
 import "./styles.css";
 import sidebar, {
   renderSidebar,
+  renderSidebarWithProjectCreateForm,
+  renderProjectCreateForm,
+  addProjectCreateForm,
+  getTitleInputFocus,
   getProjectItemById,
   addProjectFromUI,
   updateSelectedProjectItem,
 } from "./sidebar.js";
 import content, {
-  openProjectCreateForm,
   renderContentByProjectId,
   clearContent,
   getEditProjectForm,
@@ -48,8 +51,8 @@ function deselectProject() {
 }
 
 function autoSave() {
-  const projectEditForm = getEditProjectForm();
-  if (projectEditForm.hasChildNodes()) {
+  const projectEditForm = content.querySelector("form.project-edit");
+  if (projectEditForm) {
     updateProjectFromUI(projectEditForm);
     renderSidebar();
   }
@@ -64,19 +67,31 @@ sidebar.addEventListener("click", (e) => {
 
   const projectItem = e.target.closest(".project-item");
   if (projectItem) {
-    handleProjectSelection(projectItem);
+    // handleProjectSelection(projectItem);
     return;
   }
 
   if (e.target.matches("button.add-project")) {
-    autoSave();
-    const projectItem = addProjectFromUI();
-    openProjectCreateForm();
-    handleProjectSelection(projectItem);
-    // showEditProjectForm();
+    // autoSave();
+    const projectCreateForm = renderProjectCreateForm();
+    renderSidebarWithProjectCreateForm(projectCreateForm);
+    getTitleInputFocus(projectCreateForm);
+    // const project = addProjectFromUI();
+    // renderSidebar();
+    // const projectItem = getProjectItemById(project.id);
+    // getTitleInputFocus(projectItem);
     return;
   }
 });
+
+sidebar.addEventListener("submit", (e) => {
+  if (e.target.matches("form.create-project")) {
+    e.preventDefault();
+    const form = e.target;
+    
+    console.log("hi");
+  }
+})
 
 content.addEventListener("click", (e) => {
   if (e.target.matches(".project-title")) {
