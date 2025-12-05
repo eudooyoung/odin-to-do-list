@@ -11,14 +11,6 @@ export function renderSidebar() {
   sidebar.append(sidebarHeader, sidebarBody, sidebarFooter);
 }
 
-export function renderSidebarWithProjectCreateForm(projectCreateForm) {
-  clearSidebar();
-  const sidebarHeader = renderSidebarHeader();
-  const sidebarBody = renderSidebarBody(projectCreateForm);
-  const sidebarFooter = renderSidebarFooter();
-  sidebar.append(sidebarHeader, sidebarBody, sidebarFooter);
-}
-
 function renderSidebarHeader() {
   const sidebarHeader = document.createElement("div");
   sidebarHeader.classList.add("sidebar-header");
@@ -32,7 +24,7 @@ function renderSidebarHeader() {
   return sidebarHeader;
 }
 
-function renderSidebarBody(projectCreateForm = null) {
+function renderSidebarBody() {
   const sidebarBody = document.createElement("div");
   sidebarBody.classList.add("sidebar-body");
 
@@ -41,10 +33,6 @@ function renderSidebarBody(projectCreateForm = null) {
     const projectItem = renderProjectItem(project);
     sidebarBody.append(projectItem);
   });
-
-  if (projectCreateForm) {
-    sidebarBody.append(projectCreateForm);
-  }
 
   return sidebarBody;
 }
@@ -70,6 +58,11 @@ export function renderProjectCreateForm() {
   );
 
   return projectCreateForm;
+}
+
+export function addProjectCreateForm(projectCreateForm) {
+  const sidebarBody = sidebar.querySelector(".sidebar-body");
+  sidebarBody.append(projectCreateForm);
 }
 
 export function getTitleInputFocus(form) {
@@ -122,5 +115,4 @@ function renderSidebarFooter() {
 function clearSidebar() {
   sidebar.innerHTML = "";
 }
-
 export default sidebar;

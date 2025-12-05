@@ -1,7 +1,6 @@
 import "./styles.css";
 import sidebar, {
   renderSidebar,
-  renderSidebarWithProjectCreateForm,
   renderProjectCreateForm,
   addProjectCreateForm,
   getTitleInputFocus,
@@ -74,7 +73,7 @@ sidebar.addEventListener("click", (e) => {
   if (e.target.matches("button.add-project")) {
     // autoSave();
     const projectCreateForm = renderProjectCreateForm();
-    renderSidebarWithProjectCreateForm(projectCreateForm);
+    addProjectCreateForm(projectCreateForm);
     getTitleInputFocus(projectCreateForm);
     // const project = addProjectFromUI();
     // renderSidebar();
