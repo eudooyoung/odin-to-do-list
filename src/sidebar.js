@@ -1,4 +1,4 @@
-import { createProject, getProjectList } from "./project.js";
+import { createProject, getProjectList, getUniqueTitle } from "./project.js";
 
 const sidebar = document.createElement("div");
 sidebar.id = "sidebar";
@@ -42,13 +42,16 @@ export function renderProjectCreateForm() {
   projectCreateForm.classList.add("create-project");
 
   const projectTitleInput = document.createElement("input");
-  projectTitleInput.name = "new-project-title";
+  projectTitleInput.name = "project-title";
   projectTitleInput.value = "New Project";
 
   const btnConfirmCreateProject = document.createElement("button");
+  btnConfirmCreateProject.classList.add("confirm");
   btnConfirmCreateProject.textContent = "Confirm";
 
   const btnCancelCreateProject = document.createElement("button");
+  btnCancelCreateProject.classList.add("cancel");
+  btnCancelCreateProject.type = "button";
   btnCancelCreateProject.textContent = "Cancel";
 
   projectCreateForm.append(
@@ -65,9 +68,26 @@ export function addProjectCreateForm(projectCreateForm) {
   sidebarBody.append(projectCreateForm);
 }
 
-export function getTitleInputFocus(form) {
-  const input = form.querySelector("input[name='new-project-title']");
+export function removeProjectCreateForm(projectCreateForm) {
+  projectCreateForm.remove();
+}
+
+export function focusTitleInput(form) {
+  const input = form.querySelector("input[name='project-title']");
   input.focus();
+}
+
+export function getProjectCreateForm() {
+  return sidebar.querySelector("form.create-project");
+}
+
+export function addProjectFromUI(projectCreateForm) {
+  const projectTitle = projectCreateForm
+    .querySelector("input[name='project-title']")
+    .value.trim();
+  const uniqueTitle = getUniqueTitle(projectTitle);
+  const project = createProject(uniqueTitle);
+  return project;
 }
 
 function renderProjectItem(project) {
@@ -88,15 +108,14 @@ export function getProjectItemById(projectId) {
   return sidebar.querySelector(`.project-item[data-id="${projectId}"]`);
 }
 
-export function addProjectFromUI() {
-  const project = createProject();
-  return project;
-}
-
-export function updateSelectedProjectItem(projectItem) {
+export function markProjectItem(projectItem) {
   document.querySelectorAll(".project-item").forEach((item) => {
     item.classList.toggle("selected", item === projectItem);
   });
+}
+
+export function getSelectedProjectItem() {
+  return sidebar.querySelector(".project-item.selected");
 }
 
 function renderSidebarFooter() {

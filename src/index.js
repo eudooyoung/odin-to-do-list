@@ -2,11 +2,14 @@ import "./styles.css";
 import sidebar, {
   renderSidebar,
   renderProjectCreateForm,
+  getProjectCreateForm,
   addProjectCreateForm,
-  getTitleInputFocus,
+  removeProjectCreateForm,
+  focusTitleInput,
   getProjectItemById,
   addProjectFromUI,
-  updateSelectedProjectItem,
+  markProjectItem,
+  getSelectedProjectItem,
 } from "./sidebar.js";
 import content, {
   renderContentByProjectId,
@@ -27,58 +30,64 @@ function renderPage() {
   body.append(sidebar, content);
 }
 
-function handleProjectSelection(projectItem) {
+function handleProjectItemSelection(projectItem) {
   const isSelected = projectItem.classList.contains("selected");
 
   if (isSelected) {
-    deselectProject();
+    deselectProjectItem();
   } else {
-    selectProject(projectItem);
+    selectProjectItem(projectItem);
   }
 }
 
-function selectProject(projectItem) {
-  updateSelectedProjectItem(projectItem);
+function selectProjectItem(projectItem) {
+  markProjectItem(projectItem);
 
   const id = projectItem.dataset.id;
   renderContentByProjectId(id);
 }
 
-function deselectProject() {
-  updateSelectedProjectItem(null);
+function deselectProjectItem() {
+  markProjectItem(null);
   clearContent();
 }
 
 function autoSave() {
-  const projectEditForm = content.querySelector("form.project-edit");
-  if (projectEditForm) {
-    updateProjectFromUI(projectEditForm);
+  const projectCreateForm = getProjectCreateForm();
+  const selectedItem = getSelectedProjectItem();
+  if (projectCreateForm) {
+    addProjectFromUI(projectCreateForm);
     renderSidebar();
+  }
+
+  if (selectedItem) {
+    const projectItem = getProjectItemById(selectedItem.dataset.id);
+    markProjectItem(projectItem);
   }
 }
 
 sidebar.addEventListener("click", (e) => {
   if (e.target.matches(".banner")) {
-    updateSelectedProjectItem(null);
-    clearContent();
+    deselectProjectItem();
     return;
   }
 
   const projectItem = e.target.closest(".project-item");
   if (projectItem) {
-    // handleProjectSelection(projectItem);
+    handleProjectItemSelection(projectItem);
     return;
   }
 
+  if (e.target.matches("button.cancel")) {
+    const projectCreateForm = e.target.closest("form");
+    removeProjectCreateForm(projectCreateForm);
+  }
+
   if (e.target.matches("button.add-project")) {
-    // autoSave();
+    autoSave();
     const projectCreateForm = renderProjectCreateForm();
     addProjectCreateForm(projectCreateForm);
-    getTitleInputFocus(projectCreateForm);
-    // const project = addProjectFromUI();
-    // renderSidebar();
-    // const projectItem = getProjectItemById(project.id);
-    // getTitleInputFocus(projectItem);
+    focusTitleInput(projectCreateForm);
     return;
   }
 });
@@ -86,11 +95,13 @@ sidebar.addEventListener("click", (e) => {
 sidebar.addEventListener("submit", (e) => {
   if (e.target.matches("form.create-project")) {
     e.preventDefault();
-    const form = e.target;
-    
-    console.log("hi");
+    const projectCreateForm = e.target;
+    const project = addProjectFromUI(projectCreateForm);
+    renderSidebar();
+    const projectItem = getProjectItemById(project.id);
+    handleProjectSelection(projectItem);
   }
-})
+});
 
 content.addEventListener("click", (e) => {
   if (e.target.matches(".project-title")) {

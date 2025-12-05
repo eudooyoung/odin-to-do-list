@@ -2,7 +2,7 @@ import {
   getProjectById,
   updateProjectTitle,
   deleteProjectById,
-  getUniqueTitle,
+  // getUniqueTitle,
 } from "./project";
 import { createToDo } from "./toDoItem";
 
