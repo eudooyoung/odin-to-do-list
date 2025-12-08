@@ -12,21 +12,22 @@ import sidebar, {
   getSelectedProjectItem,
 } from "./sidebar.js";
 import content, {
-  renderContentByProjectId,
-  clearContent,
-  getEditProjectForm,
-  showEditProjectForm,
+  setContentProjectId,
+  renderContent,
+  toggleEditProjectForm,
   updateProjectFromUI,
   deleteProjectFromUI,
   addToDoFromUI,
   toggleToDoDetail,
   hideEditProjectForm,
+  clearContent,
 } from "./content.js";
 
 const body = document.body;
 
 function renderPage() {
   renderSidebar();
+  clearContent();
   body.append(sidebar, content);
 }
 
@@ -42,9 +43,7 @@ function handleProjectItemSelection(projectItem) {
 
 function selectProjectItem(projectItem) {
   markProjectItem(projectItem);
-
-  const id = projectItem.dataset.id;
-  renderContentByProjectId(id);
+  openProject(projectItem);
 }
 
 function deselectProjectItem() {
@@ -52,7 +51,7 @@ function deselectProjectItem() {
   clearContent();
 }
 
-function autoSave() {
+function autoSaveSidebar() {
   const projectCreateForm = getProjectCreateForm();
   const selectedItem = getSelectedProjectItem();
   if (projectCreateForm) {
@@ -64,6 +63,12 @@ function autoSave() {
     const projectItem = getProjectItemById(selectedItem.dataset.id);
     markProjectItem(projectItem);
   }
+}
+
+function openProject(projectItem) {
+  const projectId = projectItem.dataset.id;
+  setContentProjectId(projectId);
+  renderContent();
 }
 
 sidebar.addEventListener("click", (e) => {
@@ -84,7 +89,7 @@ sidebar.addEventListener("click", (e) => {
   }
 
   if (e.target.matches("button.add-project")) {
-    autoSave();
+    autoSaveSidebar();
     const projectCreateForm = renderProjectCreateForm();
     addProjectCreateForm(projectCreateForm);
     focusTitleInput(projectCreateForm);
@@ -105,11 +110,11 @@ sidebar.addEventListener("submit", (e) => {
 
 content.addEventListener("click", (e) => {
   if (e.target.matches(".project-title")) {
-    showEditProjectForm();
+    toggleEditProjectForm();
   }
 
   if (e.target.matches(".edit-project .cancel")) {
-    hideEditProjectForm();
+    toggleEditProjectForm();
   }
 
   if (e.target.matches(".edit-project .delete")) {
@@ -132,11 +137,10 @@ content.addEventListener("click", (e) => {
 content.addEventListener("submit", (e) => {
   if (e.target.matches("form.edit-project")) {
     e.preventDefault();
-
     const form = e.target;
     const updatedProject = updateProjectFromUI(form);
-    renderSidebar();
-    updateSelectedProjectItem(getProjectItemById(updatedProject.id));
+    // renderSidebar();
+    // updateSelectedProjectItem(getProjectItemById(updatedProject.id));
   }
 });
 

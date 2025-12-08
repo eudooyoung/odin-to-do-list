@@ -9,66 +9,51 @@ import { createToDo } from "./toDoItem";
 const content = document.createElement("div");
 content.id = "content";
 
-const contentHeader = document.createElement("div");
-contentHeader.classList.add("content-header");
-
-const projectTitle = document.createElement("h2");
-projectTitle.classList.add("project-title");
-
-const projectEditForm = document.createElement("form");
-projectEditForm.classList.add("edit-project");
-
-const contentBody = document.createElement("div");
-contentBody.classList.add("content-body");
-
-const toDoAddButton = document.createElement("button");
-toDoAddButton.classList.add("content-footer", "add-todo");
-toDoAddButton.textContent = "Add Todo";
-
-export function renderContentByProjectId(id) {
-  clearContent();
+export function setContentProjectId(id) {
   content.dataset.projectId = id;
-  const project = getProjectById(id);
-  renderContent(project);
 }
 
-function renderContent(project) {
-  renderContentHeader(project);
-  renderContentBody(project);
-  content.append(contentHeader, contentBody, toDoAddButton);
+export function renderContent() {
+  clearContent();
+
+  const projectId = content.dataset.projectId;
+  const project = getProjectById(projectId);
+
+  const contentHeader = renderContentHeader(project);
+  const contentBody = renderContentBody(project);
+  const contentFooter = renderContentFooter();
+
+  content.append(contentHeader, contentBody, contentFooter);
 }
 
 function renderContentHeader(project) {
+  const contentHeader = document.createElement("div");
+  contentHeader.classList.add("content-header");
+
+  const projectTitle = document.createElement("h2");
+  projectTitle.classList.add("project-title");
   projectTitle.textContent = project.title;
 
-  renderEditProjectForm(project);
+  const projectEditForm = renderEditProjectForm(project);
 
   contentHeader.append(projectTitle, projectEditForm);
+
+  return contentHeader;
 }
 
 function renderEditProjectForm(project) {
+  const projectEditForm = document.createElement("form");
+  projectEditForm.classList.add("edit-project", "hide");
+
   const projectTitleInput = document.createElement("input");
-  projectTitleInput.type = "text";
   projectTitleInput.name = "new-project-title";
   projectTitleInput.value = project.title;
 
   const editFormBtnContainer = renderEditFormBtnContainer();
 
   projectEditForm.append(projectTitleInput, editFormBtnContainer);
-}
 
-export function getEditProjectForm() {
   return projectEditForm;
-}
-
-export function showEditProjectForm() {
-  projectTitle.classList.add("hide");
-  projectEditForm.classList.add("show");
-}
-
-export function hideEditProjectForm() {
-  projectTitle.classList.remove("hide");
-  projectEditForm.classList.remove("show");
 }
 
 function renderEditFormBtnContainer() {
@@ -94,11 +79,20 @@ function renderEditFormBtnContainer() {
   return btnContainer;
 }
 
+export function toggleEditProjectForm() {
+  const projectTitle = content.querySelector(".project-title");
+  projectTitle.classList.toggle("hide");
+
+  const projectEditForm = content.querySelector("form.edit-project");
+  projectEditForm.classList.toggle("hide");
+}
+
 export function updateProjectFromUI(form) {
   const newTitle = form
     .querySelector("input[name='new-project-title']")
     .value.trim();
-  const project = getProjectById(content.dataset.projectId);
+  const projectId = content.dataset.projectId;
+  const project = getProjectById(projectId);
   const uniqueTitle = getUniqueTitle(newTitle, project);
   updateProjectTitle(project, uniqueTitle);
   hideEditProjectForm();
@@ -111,23 +105,26 @@ export function deleteProjectFromUI() {
 }
 
 function renderContentBody(project) {
+  const contentBody = document.createElement("div");
+  contentBody.classList.add("content-body");
+
   const toDoList = project.toDoList;
 
   toDoList.forEach((toDo) => {
-    const toDoItem = renderToDoElement(toDo);
+    const toDoItem = renderToDoItem(toDo);
     contentBody.append(toDoItem);
   });
 
   return contentBody;
 }
 
-function renderToDoElement(toDo) {
+function renderToDoItem(toDo) {
   const toDoItem = document.createElement("div");
-  toDoItem.classList.add("todo-item");
+  toDoItem.classList.add("to-do-item");
   toDoItem.dataset.id = toDo.id;
 
   const title = document.createElement("h3");
-  title.classList.add("todo-title");
+  title.classList.add("to-do-title");
   title.textContent = toDo.title;
 
   const description = document.createElement("div");
@@ -180,6 +177,19 @@ function getToDoDetail(toDoItem) {
   return toDoDetail;
 }
 
+function renderContentFooter() {
+  const contentFooter = document.createElement("div");
+  contentFooter.classList.add("content-footer");
+
+  const toDoAddButton = document.createElement("button");
+  toDoAddButton.classList.add("content-footer", "add-todo");
+  toDoAddButton.textContent = "Add Todo";
+
+  contentFooter.append(toDoAddButton);
+
+  return contentFooter;
+}
+
 export function addToDoFromUI() {
   const toDo = createToDo("test", "test", "test", "test");
 
@@ -207,10 +217,7 @@ function renderProjectCreateForm() {
 }
 
 export function clearContent() {
-  contentHeader.innerHTML = "";
-  projectEditForm.innerHTML = "";
-  contentBody.innerHTML = "";
-  hideEditProjectForm();
+  content.innerHTML = "";
 }
 
 export default content;

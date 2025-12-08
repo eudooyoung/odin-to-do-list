@@ -112,12 +112,8 @@ button.add-project {
   display: none;
 }
 
-form.edit-project {
+form.edit-project.hide {
   display: none;
-}
-
-form.edit-project.show {
-  display: block;
 }
 
 .content-body {
