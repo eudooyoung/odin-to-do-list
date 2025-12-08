@@ -10,8 +10,11 @@
 
 button {
   border: none;
-  font: inherit;
-  color: inherit;
+  background: black;
+
+  color: #fffcf2;
+  font-family: inherit;
+  font-size: 1rem;
 }
 
 button:hover {
@@ -56,10 +59,6 @@ body {
 
 .sidebar-body > * {
   padding: 0.5rem 1rem 0.5rem 5rem;
-  outline: 1px solid black;
-}
-
-.project-item {
 }
 
 .project-item.selected {
@@ -68,10 +67,18 @@ body {
 }
 
 form.create-project {
-  height: 100%;
-
   display: flex;
   justify-content: space-between;
+}
+
+.create-project input {
+  font: inherit;
+  width: 60%;
+}
+
+.create-project button {
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .sidebar-footer {
@@ -80,31 +87,26 @@ form.create-project {
 }
 
 button.add-project {
-  margin: 0.5rem;
+  margin: 0.7rem;
   padding: 0.2rem 0.6rem;
-  border: none;
-
-  background: black;
-  color: #fffcf2;
-  letter-spacing: 2px;
+  letter-spacing: 0.5px;
 }
 
 #content {
   background-color: white;
 
   display: grid;
-  grid-template-rows: 14rem auto 100px;
+  grid-template-rows: 14rem;
 }
 
 .content-header {
+  /* border-bottom: 1rem solid var(--deep-blue); */
+
   display: grid;
-  grid-auto-flow: column;
 }
 
 .content-header > * {
-  justify-self: center;
-  align-self: end;
-  padding-bottom: 5rem;
+  place-self: center;
   font-size: 2rem;
 }
 
@@ -112,8 +114,37 @@ button.add-project {
   display: none;
 }
 
+form.edit-project {
+  display: flex;
+  justify-content: space-between;
+}
+
 form.edit-project.hide {
   display: none;
+}
+
+.edit-project input {
+  align-self: center;
+  font: inherit;
+  width: 70%;
+}
+
+.edit-project .btn-container {
+  display: grid;
+}
+
+.edit-project button {
+  margin: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.5px;
+}
+
+.edit-project .cancel {
+  background-color: grey;
+}
+
+.edit-project .delete {
+  background-color: #8e001f;
 }
 
 .content-body {
@@ -122,15 +153,15 @@ form.edit-project.hide {
   font-size: 1.5rem;
 }
 
+.content-footer {
+  display: grid;
+}
+
 button.add-todo {
   place-self: center;
 
-  margin: 0.5rem;
   padding: 0.2rem 0.4rem;
-  border: none;
 
-  background: black;
-  color: #fffcf2;
   font-size: 0.9rem;
-  letter-spacing: 2px;
+  letter-spacing: 0.3px;
 }

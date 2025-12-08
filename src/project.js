@@ -37,11 +37,11 @@ export function deleteProjectById(id) {
   projectList.splice(idxToDelete, 1);
 }
 
-export function getUniqueTitle(projectTitle) {
+export function getUniqueTitle(projectTitle, currentProject = null) {
   let uniqueTitle = projectTitle;
   let count = 1;
 
-  while (isTitleDuplicate(uniqueTitle)) {
+  while (isTitleDuplicate(uniqueTitle, currentProject)) {
     uniqueTitle = `${projectTitle} (${count})`;
     count++;
   }
@@ -49,26 +49,10 @@ export function getUniqueTitle(projectTitle) {
   return uniqueTitle;
 }
 
-function isTitleDuplicate(currentTitle) {
-  return projectList.some((project) => project.title === currentTitle);
+function isTitleDuplicate(title, currentProject = null) {
+  return projectList.some(
+    (project) => project !== currentProject && project.title === title
+  );
 }
-
-// export function getUniqueTitle(title, currentProject) {
-//   let uniqueTitle = title;
-//   let count = 1;
-
-//   while (isTitleDuplicate(uniqueTitle, currentProject)) {
-//     uniqueTitle = `${title} (${count})`;
-//     count++;
-//   }
-
-//   return uniqueTitle;
-// }
-
-// function isTitleDuplicate(title, currentProject) {
-//   return projectList.some(
-//     (project) => project !== currentProject && project.title === title
-//   );
-// }
 
 export default Project;

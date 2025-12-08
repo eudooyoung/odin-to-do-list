@@ -2,23 +2,21 @@ import {
   getProjectById,
   updateProjectTitle,
   deleteProjectById,
-  // getUniqueTitle,
+  getUniqueTitle,
 } from "./project";
 import { createToDo } from "./toDoItem";
 
 const content = document.createElement("div");
 content.id = "content";
 
-export function setContentProjectId(id) {
-  content.dataset.projectId = id;
+let project = null;
+
+export function setContentProject(projectId) {
+  project = getProjectById(projectId);
+  content.dataset.projectId = projectId;
 }
 
 export function renderContent() {
-  clearContent();
-
-  const projectId = content.dataset.projectId;
-  const project = getProjectById(projectId);
-
   const contentHeader = renderContentHeader(project);
   const contentBody = renderContentBody(project);
   const contentFooter = renderContentFooter();
@@ -87,17 +85,17 @@ export function toggleEditProjectForm() {
   projectEditForm.classList.toggle("hide");
 }
 
+export function focusNewTitleInput() {
+  const input = content.querySelector("input[name='new-project-title']");
+  input.focus();
+}
+
 export function updateProjectFromUI(form) {
   const newTitle = form
     .querySelector("input[name='new-project-title']")
     .value.trim();
-  const projectId = content.dataset.projectId;
-  const project = getProjectById(projectId);
   const uniqueTitle = getUniqueTitle(newTitle, project);
   updateProjectTitle(project, uniqueTitle);
-  hideEditProjectForm();
-  renderContent(project);
-  return project;
 }
 
 export function deleteProjectFromUI() {
@@ -142,6 +140,18 @@ function renderToDoItem(toDo) {
   toDoItem.append(title, description, dueDate, priority);
 
   return toDoItem;
+}
+
+export function addToDoFromUI() {
+  const contentBody = content.querySelector(".content-body");
+  
+  const toDo = createToDo("test", "test", "test", "test");
+
+  project.addToDo(toDo);
+
+  const toDoItem = renderToDoItem(toDo);
+
+  contentBody.append(toDoItem);
 }
 
 export function toggleToDoDetail(toDoItem) {
@@ -190,17 +200,6 @@ function renderContentFooter() {
   return contentFooter;
 }
 
-export function addToDoFromUI() {
-  const toDo = createToDo("test", "test", "test", "test");
-
-  const project = getProjectById(content.dataset.projectId);
-  project.addToDo(toDo);
-
-  const toDoItem = renderToDoElement(toDo);
-
-  contentBody.append(toDoItem);
-}
-
 function toggleProjectContent() {
   contentHeader.classList.toggle("hide");
   contentBody.classList.toggle("hide");
@@ -217,6 +216,7 @@ function renderProjectCreateForm() {
 }
 
 export function clearContent() {
+  project = null;
   content.innerHTML = "";
 }
 
