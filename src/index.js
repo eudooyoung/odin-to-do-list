@@ -99,7 +99,7 @@ sidebar.addEventListener("submit", (e) => {
     const project = addProjectFromUI(projectCreateForm);
     renderSidebar();
     const projectItem = getProjectItemById(project.id);
-    handleProjectSelection(projectItem);
+    handleProjectItemSelection(projectItem);
   }
 });
 
