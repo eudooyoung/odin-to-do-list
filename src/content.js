@@ -4,7 +4,7 @@ import {
   deleteProjectById,
   getUniqueTitle,
 } from "./project";
-import { createToDo } from "./toDoItem";
+import { createToDo } from "./toDo.js";
 
 const content = document.createElement("div");
 content.id = "content";
@@ -31,6 +31,7 @@ function renderContentHeader(project) {
   const projectTitle = document.createElement("h2");
   projectTitle.classList.add("project-title");
   projectTitle.textContent = project.title;
+  projectTitle.title = "Click to edit project title";
 
   const projectEditForm = renderEditProjectForm(project);
 
@@ -144,7 +145,7 @@ function renderToDoItem(toDo) {
 
 export function addToDoFromUI() {
   const contentBody = content.querySelector(".content-body");
-  
+
   const toDo = createToDo("test", "test", "test", "test");
 
   project.addToDo(toDo);

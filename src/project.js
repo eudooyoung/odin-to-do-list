@@ -1,4 +1,4 @@
-import ToDo from "./toDoItem.js";
+import ToDo from "./toDo.js";
 
 const projectList = [];
 
@@ -54,5 +54,7 @@ function isTitleDuplicate(title, currentProject = null) {
     (project) => project !== currentProject && project.title === title
   );
 }
+
+createProject("My Project");
 
 export default Project;

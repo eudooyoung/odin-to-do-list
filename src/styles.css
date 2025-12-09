@@ -100,7 +100,7 @@ button.add-project {
 }
 
 .content-header {
-  /* border-bottom: 1rem solid var(--deep-blue); */
+  background-color: #f6eee3;
 
   display: grid;
 }
@@ -108,6 +108,10 @@ button.add-project {
 .content-header > * {
   place-self: center;
   font-size: 2rem;
+}
+
+.content-header .project-title:hover {
+  cursor: pointer;
 }
 
 .content-header .project-title.hide {
@@ -163,5 +167,5 @@ button.add-todo {
   padding: 0.2rem 0.4rem;
 
   font-size: 0.9rem;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
