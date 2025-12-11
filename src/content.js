@@ -1,4 +1,8 @@
-import { getProjectById, deleteProjectById, getUniqueTitle } from "./project";
+import {
+  getProjectById,
+  deleteProjectById,
+  getUniqueTitle,
+} from "./project-storage.js";
 import { createToDo } from "./to-do.js";
 
 const content = document.createElement("div");

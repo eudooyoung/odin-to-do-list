@@ -1,5 +1,5 @@
-import { getAllProject, getProjectById } from "./project.js";
-import { createToDo } from "./to-do.js";
+import { getAllProject, getProjectById } from "./project-storage.js";
+import { createToDo } from "./to-do-storage.js";
 
 const modal = document.createElement("dialog");
 modal.id = "modal";

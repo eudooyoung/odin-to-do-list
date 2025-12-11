@@ -6,10 +6,10 @@ import sidebar, {
   addProjectCreateForm,
   removeProjectCreateForm,
   focusTitleInput,
-  getProjectItemById,
+  getProjectElementById,
   addProjectFromUI,
-  markProjectItem,
-  getSelectedProjectItem,
+  markProjectElement,
+  getSelectedProjectElement,
   clearSidebar,
 } from "./sidebar.js";
 import content, {
@@ -37,45 +37,45 @@ function renderPage() {
   body.append(sidebar, content, modal);
 }
 
-function handleProjectItemSelection(projectItem) {
-  const isSelected = projectItem.classList.contains("selected");
+function handleProjectElementSelection(projectElement) {
+  const isSelected = projectElement.classList.contains("selected");
 
   if (isSelected) {
-    deselectProjectItem();
+    deselectProjectElement();
   } else {
-    selectProjectItem(projectItem);
+    selectProjectElement(projectElement);
   }
 }
 
-function selectProjectItem(projectItem) {
-  markProjectItem(projectItem);
-  openProject(projectItem);
+function selectProjectElement(projectElement) {
+  markProjectElement(projectElement);
+  openProject(projectElement);
 }
 
-function deselectProjectItem() {
-  markProjectItem(null);
+function deselectProjectElement() {
+  markProjectElement(null);
   setContentByProjectId(null);
   renderContent();
 }
 
-function openProject(projectItem) {
-  const projectId = projectItem.dataset.id;
+function openProject(projectElement) {
+  const projectId = projectElement.dataset.id;
   setContentByProjectId(projectId);
   renderContent();
 }
 
 function autoSaveSidebar() {
   const projectCreateForm = getProjectCreateForm();
-  const selectedItem = getSelectedProjectItem();
+  const selectedElement = getSelectedProjectElement();
 
   if (projectCreateForm) {
     addProjectFromUI(projectCreateForm);
     renderPage();
   }
 
-  if (selectedItem) {
-    const projectItem = getProjectItemById(selectedItem.dataset.id);
-    selectProjectItem(projectItem);
+  if (selectedElement) {
+    const projectElement = getProjectElementById(selectedElement.dataset.id);
+    selectProjectElement(projectElement);
   }
 }
 
@@ -89,9 +89,9 @@ sidebar.addEventListener("click", (e) => {
     return;
   }
 
-  const projectItem = e.target.closest(".project-item");
-  if (projectItem) {
-    handleProjectItemSelection(projectItem);
+  const projectElement = e.target.closest(".project-element");
+  if (projectElement) {
+    handleProjectElementSelection(projectElement);
     return;
   }
 
@@ -122,8 +122,8 @@ sidebar.addEventListener("submit", (e) => {
     renderSidebar();
     renderModal();
     
-    const projectItem = getProjectItemById(project.id);
-    handleProjectItemSelection(projectItem);
+    const projectElement = getProjectElementById(project.id);
+    handleProjectElementSelection(projectElement);
   }
 });
 
@@ -146,12 +146,6 @@ content.addEventListener("click", (e) => {
     addToDoFromUI();
     return;
   }
-
-  // const toDoItem = e.target.closest(".to-do-item");
-  // if (toDoItem) {
-  //   toggleToDoDetail(toDoItem);
-  //   return;
-  // }
 });
 
 content.addEventListener("submit", (e) => {
@@ -160,8 +154,8 @@ content.addEventListener("submit", (e) => {
     const projectUpdateForm = e.target;
     updateProjectFromUI(projectUpdateForm);
     renderSidebar();
-    const projectItem = getProjectItemById(content.dataset.projectId);
-    handleProjectItemSelection(projectItem);
+    const projectElement = getProjectElementById(content.dataset.projectId);
+    handleProjectElementSelection(projectElement);
   }
 });
 

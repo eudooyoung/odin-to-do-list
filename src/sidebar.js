@@ -1,4 +1,8 @@
-import { createProject, getAllProject, getUniqueTitle } from "./project.js";
+import {
+  createProject,
+  getAllProject,
+  getUniqueTitle,
+} from "./project-storage.js";
 
 const sidebar = document.createElement("div");
 sidebar.id = "sidebar";
@@ -28,13 +32,47 @@ function renderSidebarBody() {
   const sidebarBody = document.createElement("div");
   sidebarBody.classList.add("sidebar-body");
 
-  const projectList = getAllProject();
-  projectList.forEach((project) => {
-    const projectItem = renderProjectItem(project);
-    sidebarBody.append(projectItem);
-  });
+  const AllToDoElement = renderDefaultProjectElement();
+  const projectListElement = renderProjectListElement();
+
+  sidebarBody.append(AllToDoElement, projectListElement);
 
   return sidebarBody;
+}
+
+function renderDefaultProjectElement() {
+  const AllToDoElement = document.createElement("div");
+  AllToDoElement.classList.add("default", "project-element");
+  AllToDoElement.textContent = "All tasks";
+
+  return AllToDoElement;
+}
+
+function renderProjectListElement() {
+  const projectListElement = document.createElement("div");
+  projectListElement.classList.add("project-list-element");
+
+  const projectList = getAllProject();
+  projectList.forEach((project) => {
+    const projectElement = renderProjectElement(project);
+    projectListElement.append(projectElement);
+  });
+
+  return projectListElement;
+}
+
+function renderProjectElement(project) {
+  const projectElement = document.createElement("div");
+  projectElement.classList.add("project-element");
+  projectElement.dataset.id = project.id;
+
+  const projectTitle = document.createElement("h2");
+  projectTitle.classList.add("project-title");
+  projectTitle.textContent = project.title;
+
+  projectElement.append(projectTitle);
+
+  return projectElement;
 }
 
 export function renderProjectCreateForm() {
@@ -81,26 +119,12 @@ export function getProjectCreateForm() {
   return sidebar.querySelector("form.create-project");
 }
 
-function renderProjectItem(project) {
-  const projectItem = document.createElement("div");
-  projectItem.classList.add("project-item");
-  projectItem.dataset.id = project.id;
-
-  const projectTitle = document.createElement("h2");
-  projectTitle.classList.add("project-title");
-  projectTitle.textContent = project.title;
-
-  projectItem.append(projectTitle);
-
-  return projectItem;
+export function getProjectElementById(projectId) {
+  return sidebar.querySelector(`.project-element[data-id="${projectId}"]`);
 }
 
-export function getProjectItemById(projectId) {
-  return sidebar.querySelector(`.project-item[data-id="${projectId}"]`);
-}
-
-export function getSelectedProjectItem() {
-  return sidebar.querySelector(".project-item.selected");
+export function getSelectedProjectElement() {
+  return sidebar.querySelector(".project-element.selected");
 }
 
 function renderSidebarFooter() {
@@ -137,9 +161,9 @@ export function addProjectFromUI(projectCreateForm) {
   return project;
 }
 
-export function markProjectItem(projectItem) {
-  document.querySelectorAll(".project-item").forEach((item) => {
-    item.classList.toggle("selected", item === projectItem);
+export function markProjectElement(projectElement) {
+  document.querySelectorAll(".project-element").forEach((item) => {
+    item.classList.toggle("selected", item === projectElement);
   });
 }
 
