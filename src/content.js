@@ -1,30 +1,34 @@
-import {
-  getProjectById,
-  updateProjectTitle,
-  deleteProjectById,
-  getUniqueTitle,
-} from "./project";
-import { createToDo } from "./toDo.js";
+import { getProjectById, deleteProjectById, getUniqueTitle } from "./project";
+import { createToDo } from "./to-do.js";
 
 const content = document.createElement("div");
 content.id = "content";
 
 let project = null;
 
-export function setContentProject(projectId) {
+export function setContentByProjectId(projectId = null) {
+  if (!projectId) {
+    project = null;
+    return;
+  }
+
   project = getProjectById(projectId);
   content.dataset.projectId = projectId;
 }
 
 export function renderContent() {
+  if (!project) {
+    return;
+  }
+
+  clearContent();
   const contentHeader = renderContentHeader(project);
   const contentBody = renderContentBody(project);
   const contentFooter = renderContentFooter();
-
   content.append(contentHeader, contentBody, contentFooter);
 }
 
-function renderContentHeader(project) {
+function renderContentHeader() {
   const contentHeader = document.createElement("div");
   contentHeader.classList.add("content-header");
 
@@ -33,26 +37,35 @@ function renderContentHeader(project) {
   projectTitle.textContent = project.title;
   projectTitle.title = "Click to edit project title";
 
-  const projectEditForm = renderEditProjectForm(project);
+  const projectEditForm = renderEditProjectForm();
 
   contentHeader.append(projectTitle, projectEditForm);
 
   return contentHeader;
 }
 
-function renderEditProjectForm(project) {
+function renderEditProjectForm() {
   const projectEditForm = document.createElement("form");
   projectEditForm.classList.add("edit-project", "hide");
 
-  const projectTitleInput = document.createElement("input");
-  projectTitleInput.name = "new-project-title";
-  projectTitleInput.value = project.title;
-
+  const projectTitleLabel = renderProjectTitleLabel();
   const editFormBtnContainer = renderEditFormBtnContainer();
 
-  projectEditForm.append(projectTitleInput, editFormBtnContainer);
+  projectEditForm.append(projectTitleLabel, editFormBtnContainer);
 
   return projectEditForm;
+}
+
+function renderProjectTitleLabel() {
+  const projectTitleLabel = document.createElement("label");
+
+  const projectTitleInput = document.createElement("input");
+  projectTitleInput.name = "title";
+  projectTitleInput.value = project.title;
+
+  projectTitleLabel.append(projectTitleInput);
+
+  return projectTitleLabel;
 }
 
 function renderEditFormBtnContainer() {
@@ -87,16 +100,15 @@ export function toggleEditProjectForm() {
 }
 
 export function focusNewTitleInput() {
-  const input = content.querySelector("input[name='new-project-title']");
+  const input = content.querySelector(".edit-project input[name='title']");
   input.focus();
 }
 
-export function updateProjectFromUI(form) {
-  const newTitle = form
-    .querySelector("input[name='new-project-title']")
-    .value.trim();
+export function updateProjectFromUI(projectUpdateForm) {
+  const formData = new FormData(projectUpdateForm);
+  const newTitle = formData.get("title");
   const uniqueTitle = getUniqueTitle(newTitle, project);
-  updateProjectTitle(project, uniqueTitle);
+  project.updateProjectTitle(title);
 }
 
 export function deleteProjectFromUI() {
@@ -143,51 +155,6 @@ function renderToDoItem(toDo) {
   return toDoItem;
 }
 
-export function addToDoFromUI() {
-  const contentBody = content.querySelector(".content-body");
-
-  const toDo = createToDo("test", "test", "test", "test");
-
-  project.addToDo(toDo);
-
-  const toDoItem = renderToDoItem(toDo);
-
-  contentBody.append(toDoItem);
-}
-
-export function toggleToDoDetail(toDoItem) {
-  const isOpen = toDoItem.classList.contains("open");
-
-  if (isOpen) {
-    toDoItem.classList.toggle("open");
-    hideToDoDetail(toDoItem);
-  } else {
-    toDoItem.classList.toggle("open");
-    showToDoDetail(toDoItem);
-  }
-}
-
-function showToDoDetail(toDoItem) {
-  const toDoDetail = getToDoDetail(toDoItem);
-  toDoDetail.forEach((child) => {
-    child.style.display = "block";
-  });
-}
-
-function hideToDoDetail(toDoItem) {
-  const toDoDetail = getToDoDetail(toDoItem);
-  toDoDetail.forEach((child) => {
-    child.style.display = "none";
-  });
-}
-
-function getToDoDetail(toDoItem) {
-  const toDoDetail = [...toDoItem.children].filter(
-    (detail) => !detail.classList.contains("todo-title")
-  );
-  return toDoDetail;
-}
-
 function renderContentFooter() {
   const contentFooter = document.createElement("div");
   contentFooter.classList.add("content-footer");
@@ -216,8 +183,7 @@ function renderProjectCreateForm() {
   projectCreateForm.append(projectTitleInput);
 }
 
-export function clearContent() {
-  project = null;
+function clearContent() {
   content.innerHTML = "";
 }
 

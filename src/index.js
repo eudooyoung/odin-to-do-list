@@ -10,26 +10,31 @@ import sidebar, {
   addProjectFromUI,
   markProjectItem,
   getSelectedProjectItem,
+  clearSidebar,
 } from "./sidebar.js";
 import content, {
-  setContentProject,
+  setContentByProjectId,
   renderContent,
   toggleEditProjectForm,
   focusNewTitleInput,
   updateProjectFromUI,
   deleteProjectFromUI,
-  addToDoFromUI,
-  toggleToDoDetail,
-  hideEditProjectForm,
   clearContent,
 } from "./content.js";
+import modal, {
+  renderModal,
+  showModal,
+  closeModal,
+  addToDoFromUI,
+} from "./modal.js";
 
 const body = document.body;
 
 function renderPage() {
   renderSidebar();
-  clearContent();
-  body.append(sidebar, content);
+  renderContent();
+  renderModal();
+  body.append(sidebar, content, modal);
 }
 
 function handleProjectItemSelection(projectItem) {
@@ -49,28 +54,33 @@ function selectProjectItem(projectItem) {
 
 function deselectProjectItem() {
   markProjectItem(null);
-  clearContent();
+  setContentByProjectId(null);
+  renderContent();
+}
+
+function openProject(projectItem) {
+  const projectId = projectItem.dataset.id;
+  setContentByProjectId(projectId);
+  renderContent();
 }
 
 function autoSaveSidebar() {
   const projectCreateForm = getProjectCreateForm();
   const selectedItem = getSelectedProjectItem();
+
   if (projectCreateForm) {
     addProjectFromUI(projectCreateForm);
-    renderSidebar();
+    renderPage();
   }
 
   if (selectedItem) {
     const projectItem = getProjectItemById(selectedItem.dataset.id);
-    markProjectItem(projectItem);
+    selectProjectItem(projectItem);
   }
 }
 
-function openProject(projectItem) {
-  clearContent();
-  const projectId = projectItem.dataset.id;
-  setContentProject(projectId);
-  renderContent();
+function autoSaveContent() {
+  // const projectEditForm =
 }
 
 sidebar.addEventListener("click", (e) => {
@@ -97,6 +107,10 @@ sidebar.addEventListener("click", (e) => {
     focusTitleInput(projectCreateForm);
     return;
   }
+
+  if (e.target.matches("button.add-to-do")) {
+    showModal();
+  }
 });
 
 sidebar.addEventListener("submit", (e) => {
@@ -104,7 +118,10 @@ sidebar.addEventListener("submit", (e) => {
     e.preventDefault();
     const projectCreateForm = e.target;
     const project = addProjectFromUI(projectCreateForm);
+
     renderSidebar();
+    renderModal();
+    
     const projectItem = getProjectItemById(project.id);
     handleProjectItemSelection(projectItem);
   }
@@ -140,11 +157,25 @@ content.addEventListener("click", (e) => {
 content.addEventListener("submit", (e) => {
   if (e.target.matches("form.edit-project")) {
     e.preventDefault();
-    const form = e.target;
-    updateProjectFromUI(form);
+    const projectUpdateForm = e.target;
+    updateProjectFromUI(projectUpdateForm);
     renderSidebar();
     const projectItem = getProjectItemById(content.dataset.projectId);
     handleProjectItemSelection(projectItem);
+  }
+});
+
+modal.addEventListener("click", (e) => {
+  if (e.target.matches(".cancel")) {
+    closeModal();
+  }
+});
+
+modal.addEventListener("submit", (e) => {
+  if (e.target.matches("form.create-to-do")) {
+    e.preventDefault();
+    const toDoCreateForm = e.target;
+    addToDoFromUI(toDoCreateForm);
   }
 });
 

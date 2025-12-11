@@ -1,5 +1,3 @@
-import ToDo from "./toDo.js";
-
 const projectList = [];
 
 class Project {
@@ -12,9 +10,13 @@ class Project {
   addToDo(toDo) {
     this.toDoList.push(toDo);
   }
+
+  updateProjectTitle(title) {
+    this.title = title;
+  }
 }
 
-export function getProjectList() {
+export function getAllProject() {
   return projectList;
 }
 
@@ -26,10 +28,6 @@ export function createProject(title) {
 
 export function getProjectById(id) {
   return projectList.find((project) => project.id === id);
-}
-
-export function updateProjectTitle(project, title) {
-  project.title = title;
 }
 
 export function deleteProjectById(id) {
@@ -54,7 +52,5 @@ function isTitleDuplicate(title, currentProject = null) {
     (project) => project !== currentProject && project.title === title
   );
 }
-
-createProject("My Project");
 
 export default Project;
