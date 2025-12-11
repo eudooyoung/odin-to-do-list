@@ -136,15 +136,13 @@ export function closeModal() {
 
 export function addToDoFromUI(toDoCreateForm) {
   const formData = new FormData(toDoCreateForm);
-  const project = getProjectById(formData.get("project"));
   const toDo = createToDo(
     formData.get("title"),
     formData.get("description"),
     formData.get("due-date"),
     formData.get("priority"),
-    project
+    formData.get("project")
   );
-  project.addToDo(toDo);
 }
 
 export default modal;

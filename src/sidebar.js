@@ -32,34 +32,15 @@ function renderSidebarBody() {
   const sidebarBody = document.createElement("div");
   sidebarBody.classList.add("sidebar-body");
 
-  const AllToDoElement = renderDefaultProjectElement();
-  const projectListElement = renderProjectListElement();
-
-  sidebarBody.append(AllToDoElement, projectListElement);
+  const projectList = getAllProject();
+  projectList.forEach((project) => {
+    const projectElement = renderProjectElement(project);
+    sidebarBody.append(projectElement);
+  });
 
   return sidebarBody;
 }
 
-function renderDefaultProjectElement() {
-  const AllToDoElement = document.createElement("div");
-  AllToDoElement.classList.add("default", "project-element");
-  AllToDoElement.textContent = "All tasks";
-
-  return AllToDoElement;
-}
-
-function renderProjectListElement() {
-  const projectListElement = document.createElement("div");
-  projectListElement.classList.add("project-list-element");
-
-  const projectList = getAllProject();
-  projectList.forEach((project) => {
-    const projectElement = renderProjectElement(project);
-    projectListElement.append(projectElement);
-  });
-
-  return projectListElement;
-}
 
 function renderProjectElement(project) {
   const projectElement = document.createElement("div");
