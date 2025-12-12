@@ -1,6 +1,12 @@
 import Project from "./project.js";
 
 const projectList = [];
+const DEFAULT_PROJECT_ID = "default";
+projectList.push({
+  id: DEFAULT_PROJECT_ID,
+  title: "Inbox",
+  toDoList: [],
+});
 
 export function getAllProject() {
   return projectList;

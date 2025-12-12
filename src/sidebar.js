@@ -41,7 +41,6 @@ function renderSidebarBody() {
   return sidebarBody;
 }
 
-
 function renderProjectElement(project) {
   const projectElement = document.createElement("div");
   projectElement.classList.add("project-element");
@@ -143,8 +142,8 @@ export function addProjectFromUI(projectCreateForm) {
 }
 
 export function markProjectElement(projectElement) {
-  document.querySelectorAll(".project-element").forEach((item) => {
-    item.classList.toggle("selected", item === projectElement);
+  document.querySelectorAll(".project-element").forEach((element) => {
+    element.classList.toggle("selected", element === projectElement);
   });
 }
 

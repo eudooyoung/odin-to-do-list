@@ -10,22 +10,18 @@ content.id = "content";
 
 let project = null;
 
-export function setContentByProjectId(projectId = null) {
-  if (!projectId) {
-    project = null;
-    return;
-  }
-
+export function setContentByProjectId(projectId) {
   project = getProjectById(projectId);
   content.dataset.projectId = projectId;
 }
 
 export function renderContent() {
+  clearContent();
+
   if (!project) {
     return;
   }
 
-  clearContent();
   const contentHeader = renderContentHeader(project);
   const contentBody = renderContentBody(project);
   const contentFooter = renderContentFooter();

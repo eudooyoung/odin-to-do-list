@@ -3,17 +3,33 @@ import { createToDo } from "./to-do-storage.js";
 
 const modal = document.createElement("dialog");
 modal.id = "modal";
-modal.setAttribute("closedby", "any");
+modal.setAttribute("closedby", "any"); 
+
+let toDo = null;
+
+export function setModalByToDoId(toDoId) {
+  project = getProjectById(projectId);
+}
 
 export function renderModal() {
   clearModal();
+  const toDoCard = renderToDoCard();
   const toDoCreateForm = renderToDoCreateForm();
   modal.append(toDoCreateForm);
 }
 
+function renderToDoCard() {
+  const toDoCard = document.createElement("div");
+  toDoCard.classList.add("to-do-card");
+
+  const toDoTitle = document.createElement("h3");
+  toDoTitle.classList.add("to-do-title");
+
+}
+
 function renderToDoCreateForm() {
   const toDoCreateForm = document.createElement("form");
-  toDoCreateForm.classList.add("create-to-do");
+  toDoCreateForm.classList.add("create-to-do", "hide");
 
   const toDoTextField = renderToDoTextField();
   const toDoMetaField = renderToDoMetaField();
@@ -136,7 +152,7 @@ export function closeModal() {
 
 export function addToDoFromUI(toDoCreateForm) {
   const formData = new FormData(toDoCreateForm);
-  const toDo = createToDo(
+  createToDo(
     formData.get("title"),
     formData.get("description"),
     formData.get("due-date"),

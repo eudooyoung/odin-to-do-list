@@ -22,6 +22,7 @@ import content, {
   clearContent,
 } from "./content.js";
 import modal, {
+  setModalByProjectId,
   renderModal,
   showModal,
   closeModal,
@@ -31,31 +32,22 @@ import modal, {
 const body = document.body;
 
 function renderPage() {
+  clearPage();
   renderSidebar();
   renderContent();
   renderModal();
   body.append(sidebar, content, modal);
+  selectProjectElement(getProjectElementById("default"));
 }
 
-function handleProjectElementSelection(projectElement) {
-  const isSelected = projectElement.classList.contains("selected");
-
-  if (isSelected) {
-    deselectProjectElement();
-  } else {
-    selectProjectElement(projectElement);
-  }
+function clearPage() {
+  body.innerHTML = "";
+  // setContentByProjectId(null);
 }
 
 function selectProjectElement(projectElement) {
   markProjectElement(projectElement);
   openProject(projectElement);
-}
-
-function deselectProjectElement() {
-  markProjectElement(null);
-  setContentByProjectId(null);
-  renderContent();
 }
 
 function openProject(projectElement) {
@@ -64,7 +56,7 @@ function openProject(projectElement) {
   renderContent();
 }
 
-function autoSaveSidebar() {
+function autoSaveProjectForm() {
   const projectCreateForm = getProjectCreateForm();
   const selectedElement = getSelectedProjectElement();
 
@@ -91,7 +83,7 @@ sidebar.addEventListener("click", (e) => {
 
   const projectElement = e.target.closest(".project-element");
   if (projectElement) {
-    handleProjectElementSelection(projectElement);
+    selectProjectElement(projectElement);
     return;
   }
 
@@ -101,7 +93,7 @@ sidebar.addEventListener("click", (e) => {
   }
 
   if (e.target.matches("button.add-project")) {
-    autoSaveSidebar();
+    autoSaveProjectForm();
     const projectCreateForm = renderProjectCreateForm();
     addProjectCreateForm(projectCreateForm);
     focusTitleInput(projectCreateForm);
@@ -109,6 +101,7 @@ sidebar.addEventListener("click", (e) => {
   }
 
   if (e.target.matches("button.add-to-do")) {
+    autoSaveProjectForm();
     showModal();
   }
 });
@@ -121,9 +114,9 @@ sidebar.addEventListener("submit", (e) => {
 
     renderSidebar();
     renderModal();
-    
+
     const projectElement = getProjectElementById(project.id);
-    handleProjectElementSelection(projectElement);
+    selectProjectElement(projectElement);
   }
 });
 
@@ -155,7 +148,7 @@ content.addEventListener("submit", (e) => {
     updateProjectFromUI(projectUpdateForm);
     renderSidebar();
     const projectElement = getProjectElementById(content.dataset.projectId);
-    handleProjectElementSelection(projectElement);
+    selectProjectElement(projectElement);
   }
 });
 
@@ -170,6 +163,8 @@ modal.addEventListener("submit", (e) => {
     e.preventDefault();
     const toDoCreateForm = e.target;
     addToDoFromUI(toDoCreateForm);
+    closeModal();
+    renderPage();
   }
 });
 
