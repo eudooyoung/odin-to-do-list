@@ -9,7 +9,7 @@ import sidebar, {
   getProjectElementById,
   addProjectFromUI,
   markProjectElement,
-  getSelectedProjectElement,
+  getSelectedElement,
   clearSidebar,
 } from "./sidebar.js";
 import content, {
@@ -37,15 +37,18 @@ function renderPage() {
   renderContent();
   renderModal();
   body.append(sidebar, content, modal);
-  selectProjectElement(getProjectElementById("default"));
 }
 
 function clearPage() {
   body.innerHTML = "";
-  // setContentByProjectId(null);
 }
 
-function selectProjectElement(projectElement) {
+function selectProjectElementById(projectId = "default") {
+  const projectElement = getProjectElementById(projectId);
+  if (!projectElement) {
+    return;
+  }
+
   markProjectElement(projectElement);
   openProject(projectElement);
 }
@@ -58,17 +61,12 @@ function openProject(projectElement) {
 
 function autoSaveProjectForm() {
   const projectCreateForm = getProjectCreateForm();
-  const selectedElement = getSelectedProjectElement();
 
   if (projectCreateForm) {
-    addProjectFromUI(projectCreateForm);
-    renderPage();
+    return addProjectFromUI(projectCreateForm);
   }
 
-  if (selectedElement) {
-    const projectElement = getProjectElementById(selectedElement.dataset.id);
-    selectProjectElement(projectElement);
-  }
+  return "default";
 }
 
 function autoSaveContent() {
@@ -78,12 +76,13 @@ function autoSaveContent() {
 sidebar.addEventListener("click", (e) => {
   if (e.target.matches(".banner")) {
     renderPage();
+    selectProjectElementById();
     return;
   }
 
   const projectElement = e.target.closest(".project-element");
   if (projectElement) {
-    selectProjectElement(projectElement);
+    selectProjectElementById(projectElement.dataset.id);
     return;
   }
 
@@ -93,7 +92,9 @@ sidebar.addEventListener("click", (e) => {
   }
 
   if (e.target.matches("button.add-project")) {
-    autoSaveProjectForm();
+    const newProjectId = autoSaveProjectForm();
+    renderPage()
+    selectProjectElementById(newProjectId);
     const projectCreateForm = renderProjectCreateForm();
     addProjectCreateForm(projectCreateForm);
     focusTitleInput(projectCreateForm);
@@ -101,8 +102,8 @@ sidebar.addEventListener("click", (e) => {
   }
 
   if (e.target.matches("button.add-to-do")) {
-    autoSaveProjectForm();
-    showModal();
+    const selectedElement = getSelectedElement();
+    showModal(selectedElement);
   }
 });
 
@@ -110,13 +111,9 @@ sidebar.addEventListener("submit", (e) => {
   if (e.target.matches("form.create-project")) {
     e.preventDefault();
     const projectCreateForm = e.target;
-    const project = addProjectFromUI(projectCreateForm);
-
-    renderSidebar();
-    renderModal();
-
-    const projectElement = getProjectElementById(project.id);
-    selectProjectElement(projectElement);
+    const newProjectId = addProjectFromUI(projectCreateForm);
+    renderPage();
+    selectProjectElementById(newProjectId);
   }
 });
 
@@ -147,8 +144,7 @@ content.addEventListener("submit", (e) => {
     const projectUpdateForm = e.target;
     updateProjectFromUI(projectUpdateForm);
     renderSidebar();
-    const projectElement = getProjectElementById(content.dataset.projectId);
-    selectProjectElement(projectElement);
+    selectProjectElementById(content.dataset.id);
   }
 });
 
@@ -162,10 +158,12 @@ modal.addEventListener("submit", (e) => {
   if (e.target.matches("form.create-to-do")) {
     e.preventDefault();
     const toDoCreateForm = e.target;
-    addToDoFromUI(toDoCreateForm);
+    const newToDoId = addToDoFromUI(toDoCreateForm);
     closeModal();
-    renderPage();
+    const selectedElement = getSelectedElement();
+    renderPage(selectedElement);
   }
 });
 
 renderPage();
+selectProjectElementById();

@@ -12,7 +12,7 @@ let project = null;
 
 export function setContentByProjectId(projectId) {
   project = getProjectById(projectId);
-  content.dataset.projectId = projectId;
+  content.dataset.id = projectId;
 }
 
 export function renderContent() {
@@ -112,7 +112,7 @@ export function updateProjectFromUI(projectUpdateForm) {
 }
 
 export function deleteProjectFromUI() {
-  deleteProjectById(content.dataset.projectId);
+  deleteProjectById(content.dataset.id);
 }
 
 function renderContentBody(project) {

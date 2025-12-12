@@ -103,7 +103,7 @@ export function getProjectElementById(projectId) {
   return sidebar.querySelector(`.project-element[data-id="${projectId}"]`);
 }
 
-export function getSelectedProjectElement() {
+export function getSelectedElement() {
   return sidebar.querySelector(".project-element.selected");
 }
 
@@ -137,12 +137,13 @@ export function addProjectFromUI(projectCreateForm) {
   const formData = new FormData(projectCreateForm);
   const projectTitle = formData.get("project-title").trim();
   const uniqueTitle = getUniqueTitle(projectTitle);
-  const project = createProject(uniqueTitle);
-  return project;
+  const newProject =  createProject(uniqueTitle);
+  return newProject.id;
 }
 
 export function markProjectElement(projectElement) {
-  document.querySelectorAll(".project-element").forEach((element) => {
+  const projectElements = sidebar.querySelectorAll(".project-element");
+  projectElements.forEach((element) => {
     element.classList.toggle("selected", element === projectElement);
   });
 }

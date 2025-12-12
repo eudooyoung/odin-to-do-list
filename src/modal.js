@@ -3,12 +3,12 @@ import { createToDo } from "./to-do-storage.js";
 
 const modal = document.createElement("dialog");
 modal.id = "modal";
-modal.setAttribute("closedby", "any"); 
+modal.setAttribute("closedby", "any");
 
 let toDo = null;
 
 export function setModalByToDoId(toDoId) {
-  project = getProjectById(projectId);
+  toDo = getToDoById(toDoId);
 }
 
 export function renderModal() {
@@ -24,7 +24,6 @@ function renderToDoCard() {
 
   const toDoTitle = document.createElement("h3");
   toDoTitle.classList.add("to-do-title");
-
 }
 
 function renderToDoCreateForm() {
@@ -142,7 +141,12 @@ function clearModal() {
   modal.innerHTML = "";
 }
 
-export function showModal() {
+export function showModal(projectElement) {
+  const projectSelection = modal.querySelector("select[name='project']");
+  projectSelection.value = projectElement.dataset.id;
+
+  const toDoCreateForm = modal.querySelector("form");
+  toDoCreateForm.classList.remove("hide");
   modal.showModal();
 }
 
@@ -152,13 +156,15 @@ export function closeModal() {
 
 export function addToDoFromUI(toDoCreateForm) {
   const formData = new FormData(toDoCreateForm);
-  createToDo(
+  const newToDo = createToDo(
     formData.get("title"),
     formData.get("description"),
     formData.get("due-date"),
     formData.get("priority"),
     formData.get("project")
   );
+
+  return newToDo
 }
 
 export default modal;

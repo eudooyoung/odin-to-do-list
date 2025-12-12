@@ -15,8 +15,10 @@ export function createToDo(
 
   const project = getProjectById(projectId);
   project.addToDo(toDo);
+
+  return toDo;
 }
 
 export function getToDoById(toDoId) {
-  return;
+  return toDoList.find((toDo) => toDo.id === toDoId);
 }
