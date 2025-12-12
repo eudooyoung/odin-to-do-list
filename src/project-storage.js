@@ -1,12 +1,15 @@
 import Project from "./project.js";
 
 const projectList = [];
-const DEFAULT_PROJECT_ID = "default";
-projectList.push({
-  id: DEFAULT_PROJECT_ID,
-  title: "Inbox",
-  toDoList: [],
-});
+
+function createDefaultProject() {
+  const defaultProject = new Project("Inbox");
+
+  const DEFAULT_PROJECT_ID = "default";
+  defaultProject.id = DEFAULT_PROJECT_ID;
+
+  projectList.unshift(defaultProject);
+}
 
 export function getAllProject() {
   return projectList;
@@ -44,3 +47,5 @@ function isTitleDuplicate(title, currentProject = null) {
     (project) => project !== currentProject && project.title === title
   );
 }
+
+createDefaultProject();

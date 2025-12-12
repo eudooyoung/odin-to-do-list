@@ -173,10 +173,6 @@ form.edit-project.hide {
   font-size: 1.5rem;
 }
 
-.content-footer {
-  display: grid;
-}
-
 button.add-todo {
   place-self: center;
 

@@ -164,7 +164,7 @@ export function addToDoFromUI(toDoCreateForm) {
     formData.get("project")
   );
 
-  return newToDo
+  return newToDo.id;
 }
 
 export default modal;

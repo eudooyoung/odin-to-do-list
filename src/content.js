@@ -24,8 +24,7 @@ export function renderContent() {
 
   const contentHeader = renderContentHeader(project);
   const contentBody = renderContentBody(project);
-  const contentFooter = renderContentFooter();
-  content.append(contentHeader, contentBody, contentFooter);
+  content.append(contentHeader, contentBody);
 }
 
 function renderContentHeader() {
@@ -153,34 +152,6 @@ function renderToDoItem(toDo) {
   toDoItem.append(title, description, dueDate, priority);
 
   return toDoItem;
-}
-
-function renderContentFooter() {
-  const contentFooter = document.createElement("div");
-  contentFooter.classList.add("content-footer");
-
-  const toDoAddButton = document.createElement("button");
-  toDoAddButton.classList.add("content-footer", "add-todo");
-  toDoAddButton.textContent = "Add Todo";
-
-  contentFooter.append(toDoAddButton);
-
-  return contentFooter;
-}
-
-function toggleProjectContent() {
-  contentHeader.classList.toggle("hide");
-  contentBody.classList.toggle("hide");
-  toDoAddButton.classList.toggle("hide");
-}
-
-function renderProjectCreateForm() {
-  const projectTitleInput = document.createElement("input");
-  projectTitleInput.classList.add("new-project-title");
-  projectTitleInput.name = "new-project-title";
-  projectTitleInput.value = "New Project";
-
-  projectCreateForm.append(projectTitleInput);
 }
 
 function clearContent() {
