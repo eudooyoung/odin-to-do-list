@@ -1,12 +1,7 @@
 class Project {
-  constructor(title) {
-    this.id = "P-" + crypto.randomUUID();
+  constructor({ id, title } = {}) {
+    this.id = id ?? "P-" + crypto.randomUUID();
     this.title = title;
-    this.toDoList = [];
-  }
-
-  addToDo(toDo) {
-    this.toDoList.push(toDo);
   }
 
   updateProjectTitle(title) {

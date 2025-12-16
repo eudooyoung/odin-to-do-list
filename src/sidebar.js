@@ -1,5 +1,7 @@
 import {
   createProject,
+  addProject,
+  saveProjectList,
   getAllProject,
   getUniqueTitle,
 } from "./project-storage.js";
@@ -137,7 +139,9 @@ export function addProjectFromUI(projectCreateForm) {
   const formData = new FormData(projectCreateForm);
   const projectTitle = formData.get("project-title").trim();
   const uniqueTitle = getUniqueTitle(projectTitle);
-  const newProject =  createProject(uniqueTitle);
+  const newProject =  createProject({title: uniqueTitle});
+  addProject(newProject);
+  saveProjectList(newProject);
   return newProject.id;
 }
 

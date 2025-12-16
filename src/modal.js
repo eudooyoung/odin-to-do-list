@@ -1,5 +1,5 @@
 import { getAllProject, getProjectById } from "./project-storage.js";
-import { createToDo } from "./to-do-storage.js";
+import { createToDo, addToDo, saveToDoList } from "./to-do-storage.js";
 
 const modal = document.createElement("dialog");
 modal.id = "modal";
@@ -13,17 +13,8 @@ export function setModalByToDoId(toDoId) {
 
 export function renderModal() {
   clearModal();
-  const toDoCard = renderToDoCard();
   const toDoCreateForm = renderToDoCreateForm();
   modal.append(toDoCreateForm);
-}
-
-function renderToDoCard() {
-  const toDoCard = document.createElement("div");
-  toDoCard.classList.add("to-do-card");
-
-  const toDoTitle = document.createElement("h3");
-  toDoTitle.classList.add("to-do-title");
 }
 
 function renderToDoCreateForm() {
@@ -141,12 +132,13 @@ function clearModal() {
   modal.innerHTML = "";
 }
 
-export function showModal(projectElement) {
-  const projectSelection = modal.querySelector("select[name='project']");
-  projectSelection.value = projectElement.dataset.id;
-
+export function showModal(projectId) {
   const toDoCreateForm = modal.querySelector("form");
   toDoCreateForm.classList.remove("hide");
+
+  const projectSelection = modal.querySelector("select[name='project']");
+  projectSelection.value = projectId;
+
   modal.showModal();
 }
 
@@ -156,13 +148,16 @@ export function closeModal() {
 
 export function addToDoFromUI(toDoCreateForm) {
   const formData = new FormData(toDoCreateForm);
-  const newToDo = createToDo(
-    formData.get("title"),
-    formData.get("description"),
-    formData.get("due-date"),
-    formData.get("priority"),
-    formData.get("project")
-  );
+  const newToDo = createToDo({
+    title: formData.get("title"),
+    description: formData.get("description"),
+    dueDate: formData.get("due-date"),
+    priority: formData.get("priority"),
+    projectId: formData.get("project"),
+  });
+
+  addToDo(newToDo);
+  saveToDoList();
 
   return newToDo.id;
 }

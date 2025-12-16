@@ -1,5 +1,9 @@
 :root {
   --deep-blue: #0a124c;
+  --p1-color: red;
+  --p2-color: orange;
+  --p3-color: green;
+  --p4-color: grey;
 }
 
 * {
@@ -113,6 +117,7 @@ form.create-project {
 
   display: grid;
   grid-template-rows: 14rem;
+  row-gap: 2rem;
 }
 
 .content-header {
@@ -171,15 +176,33 @@ form.edit-project.hide {
   padding: 0 15rem;
   max-height: 300px;
   font-size: 1.5rem;
+
+  display: grid;
+  grid-gap: 15px;
 }
 
-button.add-todo {
-  place-self: center;
+.to-do-item {
+  border: 2px dotted black;
+}
 
-  padding: 0.2rem 0.4rem;
+.to-do-item.p1 {
+  border-color: var(--p1-color);
+}
 
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
+.to-do-item.p2 {
+  border-color: var(--p2-color);
+}
+
+.to-do-item.p3 {
+  border-color: var(--p3-color);
+}
+
+.to-do-item.p4 {
+  border-color: var(--p4-color);
+}
+
+.to-do-description {
+  font-size: 1.3rem;
 }
 
 #modal {

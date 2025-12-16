@@ -1,9 +1,11 @@
 import {
+  DEFAULT_PROJECT_ID,
   getProjectById,
   deleteProjectById,
   getUniqueTitle,
 } from "./project-storage.js";
 import { createToDo } from "./to-do.js";
+import { getToDoListByProjectId } from "./to-do-storage.js";
 
 const content = document.createElement("div");
 content.id = "content";
@@ -22,8 +24,8 @@ export function renderContent() {
     return;
   }
 
-  const contentHeader = renderContentHeader(project);
-  const contentBody = renderContentBody(project);
+  const contentHeader = renderContentHeader();
+  const contentBody = renderContentBody();
   content.append(contentHeader, contentBody);
 }
 
@@ -90,7 +92,57 @@ function renderEditFormBtnContainer() {
   return btnContainer;
 }
 
+function renderContentBody() {
+  const contentBody = document.createElement("div");
+  contentBody.classList.add("content-body");
+
+  const toDoList = getToDoListByProjectId(project.id);
+
+  toDoList.forEach((toDo) => {
+    const toDoItem = renderToDoItem(toDo);
+    contentBody.append(toDoItem);
+  });
+
+  return contentBody;
+}
+
+function renderToDoItem(toDo) {
+  const toDoItem = document.createElement("div");
+  toDoItem.classList.add("to-do-item");
+  toDoItem.dataset.id = toDo.id;
+
+  const checkBox = document.createElement("input");
+  checkBox.type = "checkbox";
+
+  const title = document.createElement("h3");
+  title.classList.add("to-do-title");
+  title.textContent = toDo.title;
+
+  const description = document.createElement("div");
+  description.classList.add("to-do-description");
+  description.textContent = toDo.description;
+
+  const dueDate = document.createElement("div");
+  dueDate.textContent = toDo.dueDate;
+
+  const priority = `p${toDo.priority}`;
+  toDoItem.classList.add(priority);
+
+  toDoItem.append(checkBox, title, description, dueDate);
+
+  return toDoItem;
+}
+
+function clearContent() {
+  content.innerHTML = "";
+}
+
 export function toggleEditProjectForm() {
+  if (project.id === DEFAULT_PROJECT_ID) {
+    alert("Default project cannot be edited");
+    return;
+  }
+
   const projectTitle = content.querySelector(".project-title");
   projectTitle.classList.toggle("hide");
 
@@ -107,55 +159,11 @@ export function updateProjectFromUI(projectUpdateForm) {
   const formData = new FormData(projectUpdateForm);
   const newTitle = formData.get("title");
   const uniqueTitle = getUniqueTitle(newTitle, project);
-  project.updateProjectTitle(title);
+  project.updateProjectTitle(uniqueTitle);
 }
 
 export function deleteProjectFromUI() {
   deleteProjectById(content.dataset.id);
-}
-
-function renderContentBody(project) {
-  const contentBody = document.createElement("div");
-  contentBody.classList.add("content-body");
-
-  const toDoList = project.toDoList;
-
-  toDoList.forEach((toDo) => {
-    const toDoItem = renderToDoItem(toDo);
-    contentBody.append(toDoItem);
-  });
-
-  return contentBody;
-}
-
-function renderToDoItem(toDo) {
-  const toDoItem = document.createElement("div");
-  toDoItem.classList.add("to-do-item");
-  toDoItem.dataset.id = toDo.id;
-
-  const title = document.createElement("h3");
-  title.classList.add("to-do-title");
-  title.textContent = toDo.title;
-
-  const description = document.createElement("div");
-  description.textContent = toDo.description;
-  description.style.display = "none";
-
-  const dueDate = document.createElement("div");
-  dueDate.textContent = toDo.dueDate;
-  dueDate.style.display = "none";
-
-  const priority = document.createElement("div");
-  priority.textContent = toDo.priority;
-  priority.style.display = "none";
-
-  toDoItem.append(title, description, dueDate, priority);
-
-  return toDoItem;
-}
-
-function clearContent() {
-  content.innerHTML = "";
 }
 
 export default content;

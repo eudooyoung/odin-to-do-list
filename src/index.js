@@ -28,8 +28,22 @@ import modal, {
   closeModal,
   addToDoFromUI,
 } from "./modal.js";
+import {
+  createDefaultProject,
+  DEFAULT_PROJECT_ID,
+  loadProjectList,
+} from "./project-storage.js";
+import { loadToDoList } from "./to-do-storage.js";
 
 const body = document.body;
+
+function initApp() {
+  loadToDoList();
+  loadProjectList();
+  createDefaultProject();
+  renderPage();
+  selectProjectElementById();
+}
 
 function renderPage() {
   clearPage();
@@ -43,7 +57,7 @@ function clearPage() {
   body.innerHTML = "";
 }
 
-function selectProjectElementById(projectId = "default") {
+function selectProjectElementById(projectId = DEFAULT_PROJECT_ID) {
   const projectElement = getProjectElementById(projectId);
   if (!projectElement) {
     return;
@@ -101,8 +115,11 @@ sidebar.addEventListener("click", (e) => {
   }
 
   if (e.target.matches("button.add-to-do")) {
+    const newProjectId = autoSaveProjectForm();
     const selectedElement = getSelectedElement();
-    showModal(selectedElement);
+    renderPage();
+    selectProjectElementById(newProjectId ?? selectedElement.dataset.id);
+    showModal(newProjectId ?? selectedElement.dataset.id);
   }
 });
 
@@ -118,6 +135,9 @@ sidebar.addEventListener("submit", (e) => {
 
 content.addEventListener("click", (e) => {
   if (e.target.matches(".project-title")) {
+    if (content.dataset.id === DEFAULT_PROJECT_ID) {
+      return;
+    }
     toggleEditProjectForm();
     focusNewTitleInput();
   }
@@ -170,5 +190,4 @@ modal.addEventListener("close", () => {
   renderModal();
 });
 
-renderPage();
-selectProjectElementById();
+initApp();
