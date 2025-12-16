@@ -112,6 +112,7 @@ function renderToDoItem(toDo) {
   toDoItem.dataset.id = toDo.id;
 
   const checkBox = document.createElement("input");
+  checkBox.classList.add("to-do-check-box");
   checkBox.type = "checkbox";
 
   const title = document.createElement("h3");
@@ -123,12 +124,17 @@ function renderToDoItem(toDo) {
   description.textContent = toDo.description;
 
   const dueDate = document.createElement("div");
+  dueDate.classList.add("to-do-due-date");
   dueDate.textContent = toDo.dueDate;
 
-  const priority = `p${toDo.priority}`;
-  toDoItem.classList.add(priority);
+  const priority = document.createElement("div");
+  const priorityStr = `p${toDo.priority}`;
 
-  toDoItem.append(checkBox, title, description, dueDate);
+  priority.textContent = priorityStr;
+  priority.classList.add("to-do-priority");
+  toDoItem.classList.add(priorityStr);
+
+  toDoItem.append(checkBox, title, description, dueDate, priority);
 
   return toDoItem;
 }
