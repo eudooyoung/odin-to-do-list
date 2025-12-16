@@ -1,4 +1,4 @@
-import { getAllProject, getProjectById } from "./project-storage.js";
+import { getAllProject } from "./project-storage.js";
 import { createToDo, addToDo, saveToDoList } from "./to-do-storage.js";
 
 const modal = document.createElement("dialog");

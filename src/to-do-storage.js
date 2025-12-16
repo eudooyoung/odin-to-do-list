@@ -10,7 +10,8 @@ export function createToDo({
   dueDate,
   priority,
   projectId = DEFAULT_PROJECT_ID,
-}) {
+  checked = false,
+} = {}) {
   const toDo = new ToDo({
     id,
     title,
@@ -18,6 +19,7 @@ export function createToDo({
     dueDate,
     priority,
     projectId,
+    checked,
   });
 
   return toDo;
@@ -41,7 +43,5 @@ export function saveToDoList() {
 
 export function loadToDoList() {
   const rawData = JSON.parse(localStorage.getItem("to-do-list"));
-  console.log(rawData);
   toDoList = rawData ? rawData.map((raw) => new ToDo(raw)) : [];
-  console.log(toDoList);
 }

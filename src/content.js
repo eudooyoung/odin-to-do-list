@@ -5,7 +5,11 @@ import {
   getUniqueTitle,
 } from "./project-storage.js";
 import { createToDo } from "./to-do.js";
-import { getToDoListByProjectId } from "./to-do-storage.js";
+import {
+  getToDoById,
+  getToDoListByProjectId,
+  saveToDoList,
+} from "./to-do-storage.js";
 
 const content = document.createElement("div");
 content.id = "content";
@@ -99,21 +103,23 @@ function renderContentBody() {
   const toDoList = getToDoListByProjectId(project.id);
 
   toDoList.forEach((toDo) => {
-    const toDoItem = renderToDoItem(toDo);
-    contentBody.append(toDoItem);
+    const toDoElement = renderToDoElement(toDo);
+    contentBody.append(toDoElement);
   });
 
   return contentBody;
 }
 
-function renderToDoItem(toDo) {
-  const toDoItem = document.createElement("div");
-  toDoItem.classList.add("to-do-item");
-  toDoItem.dataset.id = toDo.id;
+function renderToDoElement(toDo) {
+  const toDoElement = document.createElement("div");
+  toDoElement.classList.add("to-do-element");
+  toDoElement.dataset.id = toDo.id;
 
   const checkBox = document.createElement("input");
   checkBox.classList.add("to-do-check-box");
   checkBox.type = "checkbox";
+  checkBox.checked = toDo.checked;
+  toDoElement.classList.toggle("checked", toDo.checked);
 
   const title = document.createElement("h3");
   title.classList.add("to-do-title");
@@ -132,11 +138,11 @@ function renderToDoItem(toDo) {
 
   priority.textContent = priorityStr;
   priority.classList.add("to-do-priority");
-  toDoItem.classList.add(priorityStr);
+  toDoElement.classList.add(priorityStr);
 
-  toDoItem.append(checkBox, title, description, dueDate, priority);
+  toDoElement.append(checkBox, title, description, dueDate, priority);
 
-  return toDoItem;
+  return toDoElement;
 }
 
 function clearContent() {
@@ -170,6 +176,12 @@ export function updateProjectFromUI(projectUpdateForm) {
 
 export function deleteProjectFromUI() {
   deleteProjectById(content.dataset.id);
+}
+
+export function checkToDoFromUI(toDoId) {
+  const toDo = getToDoById(toDoId);
+  toDo.check();
+  saveToDoList();
 }
 
 export default content;

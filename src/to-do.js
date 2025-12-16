@@ -8,6 +8,7 @@ class ToDo {
     dueDate,
     priority,
     projectId = DEFAULT_PROJECT_ID,
+    checked = false,
   } = {}) {
     this.id = id ?? "T-" + crypto.randomUUID();
     this.title = title;
@@ -15,6 +16,11 @@ class ToDo {
     this.dueDate = dueDate;
     this.priority = priority;
     this.projectId = projectId;
+    this.checked = checked;
+  }
+
+  check() {
+    this.checked = !this.checked;
   }
 }
 

@@ -10,7 +10,6 @@ import sidebar, {
   addProjectFromUI,
   markProjectElement,
   getSelectedElement,
-  clearSidebar,
 } from "./sidebar.js";
 import content, {
   setContentByProjectId,
@@ -19,10 +18,9 @@ import content, {
   focusNewTitleInput,
   updateProjectFromUI,
   deleteProjectFromUI,
-  clearContent,
+  checkToDoFromUI,
 } from "./content.js";
 import modal, {
-  setModalByProjectId,
   renderModal,
   showModal,
   closeModal,
@@ -164,6 +162,15 @@ content.addEventListener("submit", (e) => {
     updateProjectFromUI(projectUpdateForm);
     renderSidebar();
     selectProjectElementById(content.dataset.id);
+  }
+});
+
+content.addEventListener("change", (e) => {
+  const checkbox = e.target;
+  const toDoElement = checkbox.closest(".to-do-element");
+  if (checkbox.matches("input[type='checkbox']")) {
+    checkToDoFromUI(toDoElement.dataset.id);
+    renderContent();
   }
 });
 
