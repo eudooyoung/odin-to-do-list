@@ -26,6 +26,7 @@ import modal, {
   showModal,
   closeModal,
   addToDoFromUI,
+  deleteToDoFromUI,
 } from "./modal.js";
 import {
   createDefaultProject,
@@ -151,7 +152,13 @@ content.addEventListener("click", (e) => {
     selectProjectElementById();
   }
 
-  if (e.target.matches("button.add-todo")) {
+  const toDoElement = e.target.closest(".to-do-element");
+  if (e.target.matches(".to-do-title")) {
+    renderModal({ mode: "edit", toDoId: toDoElement.dataset.id });
+    showModal();
+  }
+
+  if (e.target.matches("button.add-to-do")) {
     const newProjectId = autoSaveProjectForm();
     const selectedElement = getSelectedElement();
     renderPage();
@@ -185,7 +192,7 @@ content.addEventListener("change", (e) => {
 });
 
 modal.addEventListener("submit", (e) => {
-  if (e.target.matches("form.create-to-do")) {
+  if (e.target.matches("form.to-do")) {
     e.preventDefault();
     const toDoCreateForm = e.target;
     addToDoFromUI(toDoCreateForm);
@@ -201,10 +208,23 @@ modal.addEventListener("click", (e) => {
     closeModal();
     renderModal();
   }
+
+  if (e.target.matches(".delete")) {
+    deleteToDoFromUI();
+    closeModal();
+    renderContent();
+  }
 });
 
 modal.addEventListener("close", () => {
   renderModal();
+});
+
+modal.addEventListener("change", (e) => {
+  const select = e.target;
+  if (select.matches("[name='priority']")) {
+    select.dataset.priority = select.value;
+  }
 });
 
 initApp();

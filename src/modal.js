@@ -1,47 +1,58 @@
 import { getAllProject } from "./project-storage.js";
-import { createToDo, addToDo, saveToDoList } from "./to-do-storage.js";
+import {
+  createToDo,
+  addToDo,
+  deleteToDoById,
+  saveToDoList,
+  getToDoById,
+} from "./to-do-storage.js";
 
 const modal = document.createElement("dialog");
 modal.id = "modal";
 modal.setAttribute("closedby", "any");
 
-let toDo = null;
-
-export function setModalByToDoId(toDoId) {
-  toDo = getToDoById(toDoId);
-}
-
-export function renderModal() {
+export function renderModal({ toDoId = null } = {}) {
   clearModal();
-  const toDoCreateForm = renderToDoCreateForm();
-  modal.append(toDoCreateForm);
+
+  if (toDoId) {
+    modal.dataset.id = toDoId;
+  } else {
+    delete modal.dataset.id;
+  }
+
+  const toDo = toDoId ? getToDoById(toDoId) : null;
+  const toDoForm = renderToDoForm(toDo);
+
+  modal.append(toDoForm);
 }
 
-function renderToDoCreateForm() {
-  const toDoCreateForm = document.createElement("form");
-  toDoCreateForm.classList.add("create-to-do", "hide");
+function renderToDoForm(toDo) {
+  const toDoForm = document.createElement("form");
+  toDoForm.classList.add("to-do", "hide");
 
-  const toDoTextField = renderToDoTextField();
-  const toDoMetaField = renderToDoMetaField();
-  const toDoBtnField = renderToDoBtnField();
+  const toDoTextField = renderToDoTextField(toDo);
+  const toDoMetaField = renderToDoMetaField(toDo);
+  const toDoBtnField = renderToDoBtnField(toDo);
 
-  toDoCreateForm.append(toDoTextField, toDoMetaField, toDoBtnField);
+  toDoForm.append(toDoTextField, toDoMetaField, toDoBtnField);
 
-  return toDoCreateForm;
+  return toDoForm;
 }
 
-function renderToDoTextField() {
+function renderToDoTextField(toDo) {
   const toDoTextField = document.createElement("div");
   toDoTextField.classList.add("text-field");
 
   const toDoTitleLabel = document.createElement("label");
   const toDoTitleInput = document.createElement("input");
   toDoTitleInput.name = "title";
+  if (toDo) toDoTitleInput.value = toDo.title;
   toDoTitleLabel.append(toDoTitleInput);
 
   const toDoDescriptionLabel = document.createElement("label");
   const toDoDescriptionInput = document.createElement("textarea");
   toDoDescriptionInput.name = "description";
+  if (toDo) toDoDescriptionInput.textContent = toDo.description;
   toDoDescriptionLabel.append(toDoDescriptionInput);
 
   toDoTextField.append(toDoTitleLabel, toDoDescriptionLabel);
@@ -49,81 +60,97 @@ function renderToDoTextField() {
   return toDoTextField;
 }
 
-function renderToDoMetaField() {
+function renderToDoMetaField(toDo) {
   const toDoMetaField = document.createElement("div");
   toDoMetaField.classList.add("meta-field");
 
-  const projectLabel = renderProjectLabel();
-  const dueDateLabel = renderDueDateLabel();
-  const priorityLabel = renderPriorityLabel();
+  const projectLabel = renderProjectLabel(toDo);
+  const dueDateLabel = renderDueDateLabel(toDo);
+  const priorityLabel = renderPriorityLabel(toDo);
 
   toDoMetaField.append(projectLabel, dueDateLabel, priorityLabel);
 
   return toDoMetaField;
 }
 
-function renderProjectLabel() {
+function renderProjectLabel(toDo) {
   const projectLabel = document.createElement("label");
 
-  const projectSelection = document.createElement("select");
-  projectSelection.name = "project";
+  const projectSelect = document.createElement("select");
+  projectSelect.name = "project";
 
   const projectList = getAllProject();
   projectList.forEach((project) => {
     const projectOption = document.createElement("option");
     projectOption.value = project.id;
     projectOption.textContent = project.title;
-    projectSelection.append(projectOption);
+    projectSelect.append(projectOption);
   });
 
-  projectLabel.append(projectSelection);
+  if (toDo) projectSelect.value = toDo.projectId;
+
+  projectLabel.append(projectSelect);
 
   return projectLabel;
 }
 
-function renderDueDateLabel() {
+function renderDueDateLabel(toDo) {
   const dueDateLabel = document.createElement("label");
 
   const dueDateInput = document.createElement("input");
   dueDateInput.type = "datetime-local";
   dueDateInput.name = "due-date";
+  if (toDo) dueDateInput.value = toDo.dueDate;
 
   dueDateLabel.append(dueDateInput);
   return dueDateLabel;
 }
 
-function renderPriorityLabel() {
+function renderPriorityLabel(toDo) {
   const priorityLabel = document.createElement("label");
 
-  const prioritySelection = document.createElement("select");
-  prioritySelection.name = "priority";
+  const prioritySelect = document.createElement("select");
+  prioritySelect.name = "priority";
 
   for (let i = 1; i <= 4; i++) {
     const priorityOption = document.createElement("option");
     priorityOption.value = i;
     priorityOption.textContent = `P${i}`;
-    prioritySelection.append(priorityOption);
+    prioritySelect.append(priorityOption);
   }
 
-  priorityLabel.append(prioritySelection);
+  if (toDo) prioritySelect.value = toDo.priority;
+  prioritySelect.dataset.priority = prioritySelect.value;
+
+  priorityLabel.append(prioritySelect);
 
   return priorityLabel;
 }
 
-function renderToDoBtnField() {
+function renderToDoBtnField(toDo) {
   const toDoBtnField = document.createElement("div");
   toDoBtnField.classList.add("btn-field");
 
-  const btnConFirmCreateToDo = document.createElement("button");
-  btnConFirmCreateToDo.classList.add("confirm");
-  btnConFirmCreateToDo.textContent = "Confirm";
+  const btnSubmit = document.createElement("button");
+  btnSubmit.classList.add("primary");
+  btnSubmit.textContent = toDo ? "Create" : "Save";
 
   const btnCancelCreateToDo = document.createElement("button");
   btnCancelCreateToDo.classList.add("cancel");
   btnCancelCreateToDo.type = "button";
   btnCancelCreateToDo.textContent = "Cancel";
 
-  toDoBtnField.append(btnConFirmCreateToDo, btnCancelCreateToDo);
+  // toDoBtnField.append(btnSubmit, btnCancelCreateToDo);
+  toDoBtnField.append(btnCancelCreateToDo, btnSubmit);
+
+  if (toDo) {
+    const btnDeleteTodo = document.createElement("button");
+    btnDeleteTodo.classList.add("delete");
+    btnDeleteTodo.type = "button";
+    btnDeleteTodo.textContent = "Delete";
+    // toDoBtnField.append(btnDeleteTodo);
+    toDoBtnField.prepend(btnDeleteTodo);
+  }
 
   return toDoBtnField;
 }
@@ -136,8 +163,10 @@ export function showModal(projectId) {
   const toDoCreateForm = modal.querySelector("form");
   toDoCreateForm.classList.remove("hide");
 
-  const projectSelection = modal.querySelector("select[name='project']");
-  projectSelection.value = projectId;
+  if (projectId) {
+    const projectSelect = modal.querySelector("select[name='project']");
+    projectSelect.value = projectId;
+  }
 
   modal.showModal();
 }
@@ -160,6 +189,11 @@ export function addToDoFromUI(toDoCreateForm) {
   saveToDoList();
 
   return newToDo.id;
+}
+
+export function deleteToDoFromUI() {
+  const toDoId = modal.dataset.id;
+  deleteToDoById(toDoId);
 }
 
 export default modal;

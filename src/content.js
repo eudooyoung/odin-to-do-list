@@ -43,7 +43,7 @@ function renderContentHeader() {
   const projectTitle = document.createElement("h2");
   projectTitle.classList.add("project-title");
   projectTitle.textContent = project.title;
-  projectTitle.title = "Click to edit project title";
+  projectTitle.setAttribute("title", "Click to edit project title");
 
   const projectEditForm = renderEditProjectForm();
 
@@ -80,9 +80,9 @@ function renderEditFormBtnContainer() {
   const btnContainer = document.createElement("div");
   btnContainer.classList.add("btn-container");
 
-  const btnConfirmEdit = document.createElement("button");
-  btnConfirmEdit.classList.add("confirm");
-  btnConfirmEdit.textContent = "Confirm";
+  const btnSaveEdit = document.createElement("button");
+  btnSaveEdit.classList.add("primary");
+  btnSaveEdit.textContent = "Save";
 
   const btnCancelEdit = document.createElement("button");
   btnCancelEdit.classList.add("cancel");
@@ -94,7 +94,8 @@ function renderEditFormBtnContainer() {
   btnDeleteProject.type = "button";
   btnDeleteProject.textContent = "Delete";
 
-  btnContainer.append(btnConfirmEdit, btnCancelEdit, btnDeleteProject);
+  // btnContainer.append(btnSaveEdit, btnCancelEdit, btnDeleteProject);
+  btnContainer.append(btnDeleteProject, btnCancelEdit, btnSaveEdit);
 
   return btnContainer;
 }
@@ -126,6 +127,7 @@ function renderToDoElement(toDo) {
 
   const title = document.createElement("h3");
   title.classList.add("to-do-title");
+  title.setAttribute("title", "Click to edit Todo");
   title.textContent = toDo.title;
 
   const description = document.createElement("div");
@@ -153,7 +155,7 @@ function renderContentFooter() {
   contentFooter.classList.add("content-footer");
 
   const btnAddToDo = document.createElement("button");
-  btnAddToDo.classList.add("add-todo");
+  btnAddToDo.classList.add("add-to-do");
   btnAddToDo.textContent = "Add Todo";
 
   const btnClearCompleted = document.createElement("button");

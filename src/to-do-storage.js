@@ -37,7 +37,10 @@ export function getToDoListByProjectId(projectId) {
   return toDoList.filter((toDo) => toDo.projectId === projectId);
 }
 
-export function deleteToDoById(toDoId) {}
+export function deleteToDoById(toDoId) {
+  const idxToDelete = toDoList.findIndex((toDo) => toDo.id === toDoId);
+  toDoList.splice(idxToDelete, 1);
+}
 
 export function clearCompletedByProjectId(projectId) {
   toDoList = toDoList.filter((toDo) => {

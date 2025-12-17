@@ -1,8 +1,11 @@
 :root {
+  --btn-submit: #4c9a2a;
+  --btn-delete: #8e001f;
+  --btn-cancel: grey;
   --deep-blue: #0a124c;
-  --p1-color: #8e001f;
+  --p1-color: #d34a47;
   --p2-color: #f0b429;
-  --p3-color: #68bb59;
+  --p3-color: #76ba1b;
   --p4-color: #6e6e6e;
 }
 
@@ -34,8 +37,16 @@ button:hover {
   cursor: pointer;
 }
 
+button.primary {
+  background-color: var(--btn-submit);
+}
+
 button.cancel {
-  background-color: grey;
+  background-color: var(--btn-cancel);
+}
+
+button.delete {
+  background-color: var(--btn-delete);
 }
 
 .screen-reader-only {
@@ -302,7 +313,7 @@ form.edit-project.hide {
   padding: 1rem;
 }
 
-form.create-to-do {
+form.to-do {
   height: 100%;
 
   display: grid;
@@ -310,41 +321,78 @@ form.create-to-do {
   row-gap: 10px;
 }
 
-.create-to-do.hide {
+.to-do.hide {
   display: none;
 }
 
-.create-to-do * {
+.to-do * {
   font-family: inherit;
   font-size: 1rem;
 }
 
-.create-to-do label {
+.to-do label {
   display: contents;
 }
 
-.create-to-do .text-field {
+.to-do .text-field {
   display: grid;
   grid-template-rows: 1fr 2fr;
 }
 
-.create-to-do input[name="title"] {
+.to-do-title:hover {
+  cursor: pointer;
+}
+
+.to-do input[name="title"] {
   font-size: 2rem;
 }
 
-.create-to-do textarea[name="description"] {
+.to-do textarea[name="description"] {
   resize: none;
 }
 
-.create-to-do .meta-field {
+.to-do .meta-field {
   display: flex;
   justify-content: space-between;
 }
 
-.create-to-do input[name="due-date"] {
+.to-do input[name="due-date"] {
 }
 
-.create-to-do .btn-field {
+.to-do select[name="priority"] {
+  color: #fff;
+}
+
+.to-do select[data-priority="1"],
+.to-do option[value="1"] {
+  background-color: var(--p1-color);
+}
+
+.to-do select[data-priority="2"],
+.to-do option[value="2"] {
+  background-color: var(--p2-color);
+}
+.to-do select[data-priority="3"],
+.to-do option[value="3"] {
+  background-color: var(--p3-color);
+}
+
+.to-do select[data-priority="4"],
+.to-do option[value="4"] {
+  background-color: var(--p4-color);
+}
+
+.to-do .btn-field {
   display: flex;
   justify-content: flex-end;
+}
+
+.to-do button {
+  margin-left: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.5px;
+}
+
+.to-do .delete {
+  background: ;
 }

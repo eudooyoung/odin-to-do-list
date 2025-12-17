@@ -70,8 +70,8 @@ export function renderProjectCreateForm() {
   projectTitleInput.value = "New Project";
 
   const btnConfirmCreateProject = document.createElement("button");
-  btnConfirmCreateProject.classList.add("confirm");
-  btnConfirmCreateProject.textContent = "Confirm";
+  btnConfirmCreateProject.classList.add("primary");
+  btnConfirmCreateProject.textContent = "Create";
 
   const btnCancelCreateProject = document.createElement("button");
   btnCancelCreateProject.classList.add("cancel");
