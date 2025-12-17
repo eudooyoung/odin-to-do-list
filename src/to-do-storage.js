@@ -37,6 +37,16 @@ export function getToDoListByProjectId(projectId) {
   return toDoList.filter((toDo) => toDo.projectId === projectId);
 }
 
+export function deleteToDoById(toDoId) {}
+
+export function clearCompletedByProjectId(projectId) {
+  toDoList = toDoList.filter((toDo) => {
+    const isCurrentProject = toDo.projectId === projectId;
+    const isCompleted = toDo.checked;
+    return !isCurrentProject || !isCompleted;
+  });
+}
+
 export function saveToDoList() {
   localStorage.setItem("to-do-list", JSON.stringify(toDoList));
 }

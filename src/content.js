@@ -3,11 +3,13 @@ import {
   getProjectById,
   deleteProjectById,
   getUniqueTitle,
+  saveProjectList,
 } from "./project-storage.js";
 import { createToDo } from "./to-do.js";
 import {
   getToDoById,
   getToDoListByProjectId,
+  clearCompletedByProjectId,
   saveToDoList,
 } from "./to-do-storage.js";
 
@@ -30,7 +32,8 @@ export function renderContent() {
 
   const contentHeader = renderContentHeader();
   const contentBody = renderContentBody();
-  content.append(contentHeader, contentBody);
+  const contentFooter = renderContentFooter();
+  content.append(contentHeader, contentBody, contentFooter);
 }
 
 function renderContentHeader() {
@@ -145,6 +148,23 @@ function renderToDoElement(toDo) {
   return toDoElement;
 }
 
+function renderContentFooter() {
+  const contentFooter = document.createElement("div");
+  contentFooter.classList.add("content-footer");
+
+  const btnAddToDo = document.createElement("button");
+  btnAddToDo.classList.add("add-todo");
+  btnAddToDo.textContent = "Add Todo";
+
+  const btnClearCompleted = document.createElement("button");
+  btnClearCompleted.classList.add("clear-completed");
+  btnClearCompleted.textContent = "Clear Completed";
+
+  contentFooter.append(btnAddToDo, btnClearCompleted);
+
+  return contentFooter;
+}
+
 function clearContent() {
   content.innerHTML = "";
 }
@@ -175,12 +195,18 @@ export function updateProjectFromUI(projectUpdateForm) {
 }
 
 export function deleteProjectFromUI() {
-  deleteProjectById(content.dataset.id);
+  deleteProjectById(project.id);
+  saveProjectList();
 }
 
 export function checkToDoFromUI(toDoId) {
   const toDo = getToDoById(toDoId);
   toDo.check();
+  saveToDoList();
+}
+
+export function clearCompletedFromUI() {
+  clearCompletedByProjectId(project.id);
   saveToDoList();
 }
 

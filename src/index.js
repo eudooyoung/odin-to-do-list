@@ -19,6 +19,7 @@ import content, {
   updateProjectFromUI,
   deleteProjectFromUI,
   checkToDoFromUI,
+  clearCompletedFromUI,
 } from "./content.js";
 import modal, {
   renderModal,
@@ -147,11 +148,20 @@ content.addEventListener("click", (e) => {
   if (e.target.matches(".edit-project .delete")) {
     deleteProjectFromUI();
     renderPage();
+    selectProjectElementById();
   }
 
   if (e.target.matches("button.add-todo")) {
-    addToDoFromUI();
-    return;
+    const newProjectId = autoSaveProjectForm();
+    const selectedElement = getSelectedElement();
+    renderPage();
+    selectProjectElementById(newProjectId ?? selectedElement.dataset.id);
+    showModal(newProjectId ?? selectedElement.dataset.id);
+  }
+
+  if (e.target.matches("button.clear-completed")) {
+    clearCompletedFromUI();
+    renderContent();
   }
 });
 
@@ -166,11 +176,11 @@ content.addEventListener("submit", (e) => {
 });
 
 content.addEventListener("change", (e) => {
-  const checkbox = e.target;
-  const toDoElement = checkbox.closest(".to-do-element");
-  if (checkbox.matches("input[type='checkbox']")) {
+  const checkBox = e.target;
+  const toDoElement = checkBox.closest(".to-do-element");
+  if (checkBox.matches("input[type='checkbox']")) {
     checkToDoFromUI(toDoElement.dataset.id);
-    renderContent();
+    toDoElement.classList.toggle("checked", checkBox.checked);
   }
 });
 

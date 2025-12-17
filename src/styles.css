@@ -117,7 +117,7 @@ form.create-project {
   background-color: white;
 
   display: grid;
-  grid-template-rows: 14rem 1fr;
+  grid-template-rows: 14rem 1fr 3rem;
   row-gap: 2rem;
 }
 
@@ -215,7 +215,7 @@ form.edit-project.hide {
 }
 
 .to-do-element.checked {
-  opacity: 0.5
+  opacity: 0.5;
 }
 
 .to-do-check-box {
@@ -278,6 +278,17 @@ form.edit-project.hide {
 
 .p4 .to-do-priority {
   background-color: var(--p4-color);
+}
+
+.content-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.content-footer button {
+  margin: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.5px;
 }
 
 #modal {
