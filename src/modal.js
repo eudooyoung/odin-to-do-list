@@ -133,7 +133,7 @@ function renderToDoBtnField(toDo) {
 
   const btnSubmit = document.createElement("button");
   btnSubmit.classList.add("primary");
-  btnSubmit.textContent = toDo ? "Create" : "Save";
+  btnSubmit.textContent = toDo ? "Save" : "Create";
 
   const btnCancelCreateToDo = document.createElement("button");
   btnCancelCreateToDo.classList.add("cancel");
