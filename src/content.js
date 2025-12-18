@@ -13,7 +13,7 @@ import {
   saveToDoList,
   deleteAllToDosByProjectId,
 } from "./to-do-storage.js";
-import { format } from "date-fns";
+import { format, isPast } from "date-fns";
 
 const content = document.createElement("div");
 content.id = "content";
@@ -136,10 +136,7 @@ function renderToDoElement(toDo) {
   description.classList.add("to-do-description");
   description.textContent = toDo.description;
 
-  const dueDate = document.createElement("div");
-  dueDate.classList.add("to-do-due-date");
-  const dueDateFormat = format((toDo.dueDate), "yyyy-MM-dd a hh:mm");
-  dueDate.textContent = `Due Date: ${dueDateFormat}`;
+  const dueDate = renderDueDate(toDo);
 
   const priority = document.createElement("div");
   const priorityStr = `p${toDo.priority}`;
@@ -151,6 +148,21 @@ function renderToDoElement(toDo) {
   toDoElement.append(checkBox, title, description, dueDate, priority);
 
   return toDoElement;
+}
+
+function renderDueDate(toDo) {
+  const dueDate = document.createElement("div");
+  dueDate.classList.add("to-do-due-date");
+
+  const dueDateRaw = toDo.dueDate;
+  const dueDateText = format(dueDateRaw, "yyyy-MM-dd a hh:mm");
+  dueDate.textContent = `Due Date: ${dueDateText}`;
+
+  if (isPast(dueDateRaw)) {
+    dueDate.textContent += " (Expired)"
+  }
+
+  return dueDate;
 }
 
 function renderContentFooter() {

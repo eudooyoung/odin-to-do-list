@@ -6,7 +6,7 @@ import {
   saveToDoList,
   getToDoById,
 } from "./to-do-storage.js";
-import { format } from "date-fns";
+import { format, addMinutes } from "date-fns";
 
 const modal = document.createElement("dialog");
 modal.id = "modal";
@@ -47,6 +47,7 @@ function renderToDoTextField(toDo) {
   const toDoTitleLabel = document.createElement("label");
   const toDoTitleInput = document.createElement("input");
   toDoTitleInput.name = "title";
+  toDoTitleInput.required = true;
   if (toDo) toDoTitleInput.value = toDo.title;
   toDoTitleLabel.append(toDoTitleInput);
 
@@ -76,7 +77,6 @@ function renderToDoMetaField(toDo) {
 
 function renderProjectLabel(toDo) {
   const projectLabel = document.createElement("label");
-
   const projectSelect = document.createElement("select");
   projectSelect.name = "project";
 
@@ -101,15 +101,17 @@ function renderDueDateLabel(toDo) {
   const dueDateInput = document.createElement("input");
   dueDateInput.type = "datetime-local";
   dueDateInput.name = "due-date";
-  const now = new Date();
-  const nowFormat = format(new Date(), "yyyy-MM-dd'T'HH:mm");
+  dueDateInput.step = 1800;
+  const currDateTime = new Date();
+  const safeDateTime = addMinutes(currDateTime, 5);
+  const minDateTime = format(safeDateTime, "yyyy-MM-dd'T'HH:mm");
 
   if (toDo) {
     dueDateInput.value = toDo.dueDate;
   } else {
-    dueDateInput.value = nowFormat;
+    dueDateInput.value = minDateTime;
   }
-  dueDateInput.min = nowFormat;
+  dueDateInput.min = minDateTime;
 
   dueDateLabel.append(dueDateInput);
   return dueDateLabel;
@@ -218,6 +220,7 @@ export function updateToDoFromUI(toDoEditForm) {
 export function deleteToDoFromUI() {
   const toDoId = modal.dataset.id;
   deleteToDoById(toDoId);
+  saveToDoList();
 }
 
 export default modal;

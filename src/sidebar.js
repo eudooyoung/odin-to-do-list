@@ -68,6 +68,7 @@ export function renderProjectCreateForm() {
   projectTitleInput.name = "project-title";
   projectTitleInput.id = "create-project-title";
   projectTitleInput.value = "New Project";
+  projectTitleInput.maxLength = 25;
 
   const btnConfirmCreateProject = document.createElement("button");
   btnConfirmCreateProject.classList.add("primary");

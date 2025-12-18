@@ -312,7 +312,11 @@ form.edit-project.hide {
 
   height: 250px;
   width: 500px;
-  padding: 1rem;
+  padding: 1.5rem;
+
+  border: none;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 1px grey;
 }
 
 form.to-do {
@@ -358,29 +362,43 @@ form.to-do {
   justify-content: space-between;
 }
 
-.to-do input[name="due-date"] {
+.meta-field label {
+  display: contents;
 }
 
-.to-do select[name="priority"] {
+.meta-field select[name="project"] {
+  flex: 0 1 10rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta-field input[name="due-date"] {
+  flex: 0 1 12rem;
+  min-width: 0;
+}
+
+.meta-field select[name="priority"] {
   color: #fff;
 }
 
-.to-do select[data-priority="1"],
-.to-do option[value="1"] {
+.meta-field select[data-priority="1"],
+.meta-field option[value="1"] {
   background-color: var(--p1-color);
 }
 
-.to-do select[data-priority="2"],
-.to-do option[value="2"] {
+.meta-field select[data-priority="2"],
+.meta-field option[value="2"] {
   background-color: var(--p2-color);
 }
-.to-do select[data-priority="3"],
-.to-do option[value="3"] {
+.meta-field select[data-priority="3"],
+.meta-field option[value="3"] {
   background-color: var(--p3-color);
 }
 
-.to-do select[data-priority="4"],
-.to-do option[value="4"] {
+.meta-field select[data-priority="4"],
+.meta-field option[value="4"] {
   background-color: var(--p4-color);
 }
 
