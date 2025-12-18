@@ -1,4 +1,4 @@
-odin to-do list toy project
+odin to-do list toy project [link](https://eudooyoung.github.io/odin-to-do-list/)
 
 project-feature break down:
 - todo-items have:
@@ -13,4 +13,4 @@ project-feature break down:
 - projects
   - id
   - title
-  
+
