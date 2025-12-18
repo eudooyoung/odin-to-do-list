@@ -50,6 +50,13 @@ export function clearCompletedByProjectId(projectId) {
   });
 }
 
+export function deleteAllToDosByProjectId(projectId) {
+  toDoList = toDoList.filter((toDo) => {
+    const isCurrentProject = toDo.projectId === projectId;
+    return !isCurrentProject;
+  });
+}
+
 export function saveToDoList() {
   localStorage.setItem("to-do-list", JSON.stringify(toDoList));
 }

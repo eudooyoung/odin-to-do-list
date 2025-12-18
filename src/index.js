@@ -81,10 +81,6 @@ function autoSaveProjectForm() {
   }
 }
 
-function autoSaveContent() {
-  // const projectEditForm =
-}
-
 sidebar.addEventListener("click", (e) => {
   if (e.target.matches(".banner")) {
     renderPage();

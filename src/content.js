@@ -11,6 +11,7 @@ import {
   getToDoListByProjectId,
   clearCompletedByProjectId,
   saveToDoList,
+  deleteAllToDosByProjectId,
 } from "./to-do-storage.js";
 
 const content = document.createElement("div");
@@ -199,6 +200,8 @@ export function updateProjectFromUI(projectUpdateForm) {
 export function deleteProjectFromUI() {
   deleteProjectById(project.id);
   saveProjectList();
+  deleteAllToDosByProjectId(project.id);
+  saveToDoList();
 }
 
 export function checkToDoFromUI(toDoId) {
