@@ -120,7 +120,7 @@ function renderPriorityLabel(toDo) {
   }
 
   if (toDo) prioritySelect.value = toDo.priority;
-  else prioritySelect.value = "4";
+  else prioritySelect.value = 4;
   prioritySelect.dataset.priority = prioritySelect.value;
 
   priorityLabel.append(prioritySelect);
@@ -182,7 +182,7 @@ export function addToDoFromUI(toDoCreateForm) {
     title: formData.get("title"),
     description: formData.get("description"),
     dueDate: formData.get("due-date"),
-    priority: formData.get("priority"),
+    priority: Number(formData.get("priority")),
     projectId: formData.get("project"),
   });
 
@@ -190,6 +190,18 @@ export function addToDoFromUI(toDoCreateForm) {
   saveToDoList();
 
   return newToDo.id;
+}
+
+export function updateToDoFromUI(toDoEditForm) {
+  const toDo = getToDoById(modal.dataset.id);
+  const formData = new FormData(toDoEditForm);
+  toDo.update({
+    title: formData.get("title"),
+    description: formData.get("description"),
+    dueDate: formData.get("due-date"),
+    priority: Number(formData.get("priority")),
+    projectId: formData.get("project"),
+  });
 }
 
 export function deleteToDoFromUI() {

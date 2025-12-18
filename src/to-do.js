@@ -19,6 +19,14 @@ class ToDo {
     this.checked = checked;
   }
 
+  update({ title, description, dueDate, priority, projectId } = {}) {
+    this.title = title;
+    this.description = description;
+    this.dueDate = dueDate;
+    this.priority = priority;
+    this.projectId = projectId;
+  }
+
   check() {
     this.checked = !this.checked;
   }

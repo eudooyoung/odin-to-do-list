@@ -26,6 +26,7 @@ import modal, {
   showModal,
   closeModal,
   addToDoFromUI,
+  updateToDoFromUI,
   deleteToDoFromUI,
 } from "./modal.js";
 import {
@@ -190,9 +191,16 @@ content.addEventListener("change", (e) => {
 modal.addEventListener("submit", (e) => {
   if (e.target.matches("form.to-do")) {
     e.preventDefault();
-    const toDoCreateForm = e.target;
-    addToDoFromUI(toDoCreateForm);
-    const projectId = toDoCreateForm.elements.project.value;
+
+    const toDoForm = e.target;
+    const projectId = toDoForm.elements.project.value;
+
+    if (modal.dataset.id) {
+      updateToDoFromUI(toDoForm);
+    } else {
+      addToDoFromUI(toDoForm);
+    }
+
     closeModal();
     renderPage();
     selectProjectElementById(projectId);
