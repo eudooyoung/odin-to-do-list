@@ -120,6 +120,7 @@ function renderPriorityLabel(toDo) {
   }
 
   if (toDo) prioritySelect.value = toDo.priority;
+  else prioritySelect.value = "4";
   prioritySelect.dataset.priority = prioritySelect.value;
 
   priorityLabel.append(prioritySelect);
