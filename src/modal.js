@@ -6,6 +6,7 @@ import {
   saveToDoList,
   getToDoById,
 } from "./to-do-storage.js";
+import { format } from "date-fns";
 
 const modal = document.createElement("dialog");
 modal.id = "modal";
@@ -100,7 +101,15 @@ function renderDueDateLabel(toDo) {
   const dueDateInput = document.createElement("input");
   dueDateInput.type = "datetime-local";
   dueDateInput.name = "due-date";
-  if (toDo) dueDateInput.value = toDo.dueDate;
+  const now = new Date();
+  const nowFormat = format(new Date(), "yyyy-MM-dd'T'HH:mm");
+
+  if (toDo) {
+    dueDateInput.value = toDo.dueDate;
+  } else {
+    dueDateInput.value = nowFormat;
+  }
+  dueDateInput.min = nowFormat;
 
   dueDateLabel.append(dueDateInput);
   return dueDateLabel;
@@ -202,6 +211,8 @@ export function updateToDoFromUI(toDoEditForm) {
     priority: Number(formData.get("priority")),
     projectId: formData.get("project"),
   });
+
+  saveToDoList();
 }
 
 export function deleteToDoFromUI() {

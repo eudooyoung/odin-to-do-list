@@ -265,6 +265,8 @@ form.edit-project.hide {
 
 .to-do-due-date {
   grid-area: due-date;
+  font-size: 1rem;
+  color: #5a5a5a;
 }
 
 .to-do-priority {

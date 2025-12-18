@@ -13,6 +13,7 @@ import {
   saveToDoList,
   deleteAllToDosByProjectId,
 } from "./to-do-storage.js";
+import { format } from "date-fns";
 
 const content = document.createElement("div");
 content.id = "content";
@@ -137,7 +138,8 @@ function renderToDoElement(toDo) {
 
   const dueDate = document.createElement("div");
   dueDate.classList.add("to-do-due-date");
-  dueDate.textContent = toDo.dueDate;
+  const dueDateFormat = format((toDo.dueDate), "yyyy-MM-dd a hh:mm");
+  dueDate.textContent = `Due Date: ${dueDateFormat}`;
 
   const priority = document.createElement("div");
   const priorityStr = `p${toDo.priority}`;
